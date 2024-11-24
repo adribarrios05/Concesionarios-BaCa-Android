@@ -1,11 +1,12 @@
-package com.example.concesionariosbaca.data.local.car
+package com.example.concesionariosbaca.model.database
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.concesionariosbaca.data.local.customer.CustomerEntity
+import com.example.concesionariosbaca.model.entities.CarEntity
+import com.example.concesionariosbaca.model.entities.CustomerEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -13,6 +14,9 @@ interface CarDao {
 
     @Insert
     suspend fun create(car: CarEntity)
+
+    @Insert
+    suspend fun createAll(car: List<CarEntity>)
 
     @Update
     suspend fun update(car: CarEntity)

@@ -1,11 +1,14 @@
-package com.example.concesionariosbaca.data.local.customer
+package com.example.concesionariosbaca.model.database
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.concesionariosbaca.data.local.car.CarEntity
+import com.example.concesionariosbaca.model.entities.CarEntity
+import com.example.concesionariosbaca.model.entities.AppUserEntity
+import com.example.concesionariosbaca.model.entities.CustomerEntity
+
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -30,4 +33,7 @@ interface CustomerDao {
 
     @Query("SELECT * FROM customer LEFT OUTER JOIN car ON customer.id = car.customerId")
     suspend fun readOwnerOfCar():Map<CustomerEntity, List<CarEntity>>
+
+    @Query("SELECT * FROM customer LEFT OUTER JOIN app-user ON customer.userId = app-user.id")
+    suspend fun readUserOfCustomer(): Map<CustomerEntity, AppUserEntity>
 }

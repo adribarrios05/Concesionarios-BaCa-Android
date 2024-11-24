@@ -1,4 +1,4 @@
-package com.example.concesionariosbaca.data.local.customer
+package com.example.concesionariosbaca.model.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -11,5 +11,6 @@ data class CustomerEntity(
     val DNI: String,
     val phone: String,
     val age: String,
-    val carRentId: Int?
+    val carRentId: Int?,
+    val userId: Int?
 )
