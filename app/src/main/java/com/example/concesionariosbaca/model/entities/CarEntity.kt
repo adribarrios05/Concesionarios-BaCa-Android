@@ -14,5 +14,6 @@ data class CarEntity(
     val horsePower: Int,
     val color: String,
     val type: String,
-    val customerId: Int?
+    val customerId: Int?,
+    val imageUrl: String?
 )

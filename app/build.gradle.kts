@@ -48,7 +48,7 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
-    implementation(libs.androidx.core.ktx)
+    implementation (libs.androidx.core.ktx.v1130)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
@@ -56,6 +56,19 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(kotlin("script-runtime"))
+
+
+    // Hilt
+    implementation (libs.hilt.android.v244)
+    kapt (libs.hilt.compiler)
+    implementation (libs.androidx.hilt.lifecycle.viewmodel)
+    kapt (libs.androidx.hilt.compiler)
+    implementation (libs.androidx.fragment.ktx)
+
+    // Coil
+    implementation (libs.coil)
+    implementation (libs.coil.base)
 }
 
 kapt{
