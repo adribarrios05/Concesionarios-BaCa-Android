@@ -1,21 +1,24 @@
 package com.example.concesionariosbaca.ui.catalog
 
 import android.os.Bundle
-import androidx.fragment.app.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.concesionariosbaca.R
 import com.example.concesionariosbaca.databinding.FragmentCatalogBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CatalogFragment : Fragment() {
+
 
     private lateinit var binding: FragmentCatalogBinding
     private val catalogViewModel: CatalogViewModel by viewModels()

@@ -34,6 +34,6 @@ interface CustomerDao {
     @Query("SELECT * FROM customer LEFT OUTER JOIN car ON customer.id = car.customerId")
     suspend fun readOwnerOfCar():Map<CustomerEntity, List<CarEntity>>
 
-    @Query("SELECT * FROM customer LEFT OUTER JOIN app-user ON customer.userId = app-user.id")
+    @Query("SELECT * FROM customer LEFT OUTER JOIN appUser ON customer.userId = appUser.id")
     suspend fun readUserOfCustomer(): Map<CustomerEntity, AppUserEntity>
 }

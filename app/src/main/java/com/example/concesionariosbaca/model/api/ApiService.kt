@@ -3,6 +3,7 @@ package com.example.concesionariosbaca.model.api
 import com.example.concesionariosbaca.model.entities.AppUserEntity
 import com.example.concesionariosbaca.model.entities.CarEntity
 import com.example.concesionariosbaca.model.entities.CustomerEntity
+import dagger.Provides
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
@@ -10,6 +11,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import javax.inject.Inject
 import javax.inject.Singleton
+
 
 interface ApiService {
     @GET("cars")

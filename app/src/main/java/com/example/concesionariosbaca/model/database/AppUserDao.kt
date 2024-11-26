@@ -21,16 +21,15 @@ interface AppUserDao {
     @Delete
     suspend fun delete(user: AppUserEntity)
 
-    @Query("SELECT * FROM car")
+    @Query("SELECT * FROM appUser")
     suspend fun readAll(): List<AppUserEntity>
 
-    @Query("SELECT * FROM car WHERE id = :id")
+    @Query("SELECT * FROM appUser WHERE id = :id")
     suspend fun readOne(id: String): AppUserEntity
 
-    @Query("SELECT * FROM car")
+    @Query("SELECT * FROM appUser")
     fun observeAll(): Flow<AppUserEntity>
 
-    @Query("SELECT * FROM car JOIN customer ON car.customerId = customer.id")
-    suspend fun readCustomerCars():Map<AppUserEntity, CustomerEntity>
+    
 
 }
