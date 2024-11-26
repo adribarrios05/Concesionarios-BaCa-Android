@@ -34,8 +34,10 @@ class CatalogFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val carAdapter = CarAdapter(requireContext())
         val recyclerView = binding.catalogList
+        val emptyState = binding.emptyState
 
         recyclerView.apply {
             adapter = carAdapter
@@ -44,8 +46,14 @@ class CatalogFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 catalogViewModel.uiState.collect { cars ->
-                    cars?.let {
-                        carAdapter.submitList(it)
+
+                    if (cars.isNullOrEmpty()) {
+                        recyclerView.visibility = View.GONE
+                        emptyState.visibility = View.VISIBLE
+                    } else {
+                        recyclerView.visibility = View.VISIBLE
+                        emptyState.visibility = View.GONE
+                        carAdapter.submitList(cars)
                     }
                 }
             }

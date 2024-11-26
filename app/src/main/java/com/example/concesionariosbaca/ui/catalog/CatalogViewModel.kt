@@ -23,6 +23,7 @@ class CatalogViewModel @Inject constructor(
         get() = _uiState.asStateFlow()
 
     init{
+        loadLocalCarsFromApi()
         getCars()
     }
 

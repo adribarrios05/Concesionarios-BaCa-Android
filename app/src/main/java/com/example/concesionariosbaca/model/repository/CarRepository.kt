@@ -11,14 +11,14 @@ class CarRepository @Inject constructor(
 ){
 
     suspend fun getCars(): List<CarEntity> {
-        val localCars = carDao.readAll()
+        val apiCars = apiService.getCars()
 
-        return localCars.ifEmpty {
-            val apiCars = apiService.getCars()
-            if (apiCars.isEmpty()) {
+        return apiCars.ifEmpty {
+            val localCars = carDao.readAll()
+            if (localCars.isEmpty()) {
                 return emptyList()
             }
-            apiCars
+            localCars
         }
     }
 

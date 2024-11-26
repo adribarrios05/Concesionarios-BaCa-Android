@@ -33,7 +33,7 @@ class CarAdapter(private val context: Context):
                 }
 
                 btnViewDetails.setOnClickListener {
-                    // Implementa la navegación o acción al pulsar "Ver más"
+                    // TODO() nav button
                 }
             }
         }

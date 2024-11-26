@@ -30,7 +30,7 @@ interface ApiService {
 @Singleton
 class ConcesionarioService @Inject constructor() {
     private val retrofit = Retrofit.Builder()
-        .baseUrl("https://localhost:1337/api/")
+        .baseUrl("https://172.31.22.157:1337/api/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
