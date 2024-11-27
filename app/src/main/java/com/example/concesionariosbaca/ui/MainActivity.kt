@@ -1,13 +1,12 @@
-package com.example.concesionariosbaca
+package com.example.concesionariosbaca.ui
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.example.concesionariosbaca.R
 import com.example.concesionariosbaca.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -17,18 +16,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+        val navHost = supportFragmentManager.findFragmentById(R.id.main_navigation_area) as NavHostFragment
+        val navController = navHost.navController
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(binding.root)
-
-        if (savedInstanceState == null){
-            val navHostFragment = NavHostFragment.create(R.navigation.main)
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, navHostFragment)
-                .setPrimaryNavigationFragment(navHostFragment)
-                .commit()
-        }
     }
-
 }
