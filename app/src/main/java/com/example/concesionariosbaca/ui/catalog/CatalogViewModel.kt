@@ -29,16 +29,16 @@ class CatalogViewModel @Inject constructor(
 
     private fun getCars() {
         viewModelScope.launch {
-            try{
-            val cars = carRepository.getCars()
-            _uiState.value = cars
-            } catch (e: Exception){
+            try {
+                val cars = carRepository.getCars() // Ya devuelve una lista de CarEntity
+                _uiState.value = cars
+            } catch (e: Exception) {
                 _uiState.value = emptyList()
             }
         }
     }
 
-    fun loadLocalCarsFromApi() {
+    private fun loadLocalCarsFromApi() {
         viewModelScope.launch {
             carRepository.loadLocalCarsFromApi()
         }

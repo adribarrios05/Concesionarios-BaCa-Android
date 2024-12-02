@@ -44,35 +44,34 @@ android {
 
 dependencies {
     // Core AndroidX Libraries
-    implementation ("androidx.core:core-ktx:1.13.0")
-    implementation ("androidx.appcompat:appcompat:1.7.0")
-    implementation ("com.google.android.material:material:1.12.0")
-    implementation ("androidx.activity:activity-ktx:1.9.3")
-    implementation ("androidx.constraintlayout:constraintlayout:2.2.0")
-    implementation("androidx.fragment:fragment-ktx:1.8.5")
+    implementation (libs.androidx.core.ktx.v1130)
+    implementation (libs.androidx.appcompat)
+    implementation (libs.androidx.activity.activity.ktx3)
+    implementation (libs.androidx.constraintlayout)
+    implementation(libs.androidx.fragment.ktx)
 
     // Lifecycle (ViewModel & LiveData)
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
-    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
+    implementation (libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.lifecycle.viewmodel.compose3)
+    implementation (libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.lifecycle.runtime.ktx3)
 
     // Room Database
-    implementation ("androidx.room:room-runtime:2.6.1")
-    kapt ("androidx.room:room-compiler:2.6.1")
-    implementation ("androidx.room:room-ktx:2.6.1")
+    implementation (libs.androidx.room.runtime)
+    kapt (libs.androidx.room.room.compiler3)
+    implementation (libs.androidx.room.ktx)
 
     // Networking - Retrofit and GSON
-    implementation ("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
 
     // Hilt Dependency Injection
-    implementation ("com.google.dagger:hilt-android:2.51.1")
-    kapt ("com.google.dagger:hilt-compiler:2.51.1")
+    implementation (libs.hilt.android)
+    kapt (libs.hilt.compiler)
 
     // Coil (Image Loading Library)
-    implementation ("io.coil-kt:coil:2.7.0")
-    implementation ("io.coil-kt:coil-base:2.7.0")
+    implementation (libs.coil)
+    implementation (libs.coil.base)
 
     // Testing
     testImplementation (libs.junit)
@@ -97,6 +96,10 @@ dependencies {
 
     // JSON serialization library, works with the Kotlin serialization plugin
     implementation(libs.kotlinx.serialization.json)
+
+    //Material
+    implementation (libs.androidx.material3)
+
 }
 
 kapt{

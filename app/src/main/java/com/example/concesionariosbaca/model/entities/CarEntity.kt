@@ -8,12 +8,13 @@ data class CarEntity(
     @PrimaryKey val id: String,
     val brand: String,
     val model: String,
-    val price: Double,
-    val description: String,
-    val doors: Int,
     val horsePower: Int,
+    val description: String,
     val color: String,
     val type: String,
-    val customerId: Int?,
-    val imageUrl: String?
+    val price: Double,
+    val plate: String,
+    val pictureUrl: String?,
+    val doors: Int,
+    val customerId: Int?
 )

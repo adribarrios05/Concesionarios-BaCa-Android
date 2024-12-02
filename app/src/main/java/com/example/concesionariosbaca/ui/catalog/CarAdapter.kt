@@ -26,7 +26,7 @@ class CarAdapter(private val context: Context):
             binding.apply {
                 carName.text = "${car.brand} ${car.model}"
 
-                carImage.load(car.imageUrl) {
+                carImage.load(car.pictureUrl) {
                     placeholder(R.color.dark_red)
                     error(R.color.black)
                     crossfade(true)

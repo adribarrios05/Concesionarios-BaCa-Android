@@ -13,7 +13,9 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val API_URL = "https://172.31.22.157:1337/api/"
+    private const val API_URL = "http://172.31.22.157:1337/api/"
+
+
 
     @Provides
     @Singleton

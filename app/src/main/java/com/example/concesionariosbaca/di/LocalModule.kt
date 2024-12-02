@@ -31,33 +31,7 @@ object LocalModule {
             context,
             ConcesionarioDatabase::class.java,
             "concesionarios_db"
-        ).addCallback(object : RoomDatabase.Callback() {
-            override fun onCreate(db: SupportSQLiteDatabase) {
-                super.onCreate(db)
-                // Insertar datos iniciales en un hilo separado
-                Executors.newSingleThreadExecutor().execute {
-                    val carDao = provideDatabase(context).carDao()
-                    GlobalScope.launch {
-                        carDao.create(
-                            CarEntity(
-                                id = "1",
-                                model = "LaFerrari",
-                                brand = "Ferrari",
-                                imageUrl = "https://example.com/model_s.jpg",
-                                price = 3000000.0,
-                                description = "A Ferrari LaFerrari",
-                                doors = 3,
-                                horsePower = 865,
-                                color = "Red",
-                                type = "SuperSport",
-                                customerId = 0
-                            )
-                        )
-                    }
-
-                }
-            }
-        }).build()
+        ).build()
     }
 
     @Provides

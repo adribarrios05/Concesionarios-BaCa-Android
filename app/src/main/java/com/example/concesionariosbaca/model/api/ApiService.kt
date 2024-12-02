@@ -3,7 +3,9 @@ package com.example.concesionariosbaca.model.api
 import com.example.concesionariosbaca.model.entities.AppUserEntity
 import com.example.concesionariosbaca.model.entities.CarEntity
 import com.example.concesionariosbaca.model.entities.CustomerEntity
+import com.example.concesionariosbaca.model.mapping.CarResponse
 import dagger.Provides
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
@@ -14,8 +16,8 @@ import javax.inject.Singleton
 
 
 interface ApiService {
-    @GET("cars")
-    suspend fun getCars(): List<CarEntity>
+    @GET("cars?populate=picture")
+    suspend fun getCars(): CarResponse
 
     @GET("car")
     suspend fun getCar(): CarEntity
