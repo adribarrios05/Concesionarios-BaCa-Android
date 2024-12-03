@@ -23,10 +23,10 @@ class CarRepository @Inject constructor(
                     mapCarDataToEntity(carData)
                 }
             } else {
-                carDao.readAll() // Si la API está vacía, devolver datos locales
+                carDao.readAll() // Si la API está vacía, devuelve datos locales
             }
         } catch (e: Exception) {
-            carDao.readAll() // En caso de error, devolver datos locales
+            carDao.readAll() // En caso de error, devuelve datos locales
         }
     }
 
@@ -34,9 +34,7 @@ class CarRepository @Inject constructor(
         return try {
             val apiResponse: CarResponse = apiService.getCar(carId)
             if(apiResponse.data.isNotEmpty()){
-                apiResponse.data.map { carData ->
-                    mapCarDataToEntity(carData)
-                }
+                mapCarDataToEntity(apiResponse.data.first())
             } else {
                 carDao.readOne(carId)
             }
@@ -53,7 +51,7 @@ class CarRepository @Inject constructor(
                     val carEntities = apiResponse.data.map { carData ->
                         mapCarDataToEntity(carData)
                     }
-                    carDao.createAll(carEntities) // Guardar en la base local
+                    carDao.createAll(carEntities) // Guarda en la base local
                 }
             } catch (e: Exception) {
                 // TODO() manejar la excepción

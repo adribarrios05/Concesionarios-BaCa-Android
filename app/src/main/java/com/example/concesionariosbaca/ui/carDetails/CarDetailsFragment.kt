@@ -1,4 +1,4 @@
-package com.example.concesionariosbaca.ui.details
+package com.example.concesionariosbaca.ui.carDetails
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -14,7 +14,6 @@ import coil.load
 import com.example.concesionariosbaca.R
 import com.example.concesionariosbaca.databinding.FragmentCarDetailsBinding
 import com.example.concesionariosbaca.model.entities.CarEntity
-import com.example.concesionariosbaca.ui.carDetails.CarDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -35,6 +34,11 @@ class CarDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val carId = arguments?.getString("carId")
+        if (carId != null) {
+            carDetailsViewModel.getCarDetails(carId)
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

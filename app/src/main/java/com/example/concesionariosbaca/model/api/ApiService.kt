@@ -11,6 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,8 +20,8 @@ interface ApiService {
     @GET("cars?populate=picture")
     suspend fun getCars(): CarResponse
 
-    @GET("car")
-    suspend fun getCar(id: String): CarResponse
+    @GET("car/{id}")
+    suspend fun getCar(@Path("id") id: String): CarResponse
 
     @GET("customer")
     suspend fun getCustomer(id: String): List<CustomerEntity>

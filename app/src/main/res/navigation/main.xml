@@ -9,5 +9,20 @@
         android:id="@+id/catalogFragment"
         android:name="com.example.concesionariosbaca.ui.catalog.CatalogFragment"
         android:label="Catalog"
-        tools:layout="@layout/fragment_catalog" />
+        tools:layout="@layout/fragment_catalog">
+        <action
+            android:id="@+id/action_catalogFragment_to_carDetailsFragment"
+            app:destination="@id/carDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/carDetailsFragment"
+        android:name="com.example.concesionariosbaca.ui.carDetails.CarDetailsFragment"
+        android:label="Car Details"
+        tools:layout="@layout/fragment_car_details">
+        <argument
+            android:name="carId"
+            app:argType="string" />
+    </fragment>
+
 </navigation>

@@ -12,6 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.concesionariosbaca.R
 import com.example.concesionariosbaca.databinding.FragmentCatalogBinding
@@ -37,10 +38,10 @@ class CatalogFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val carAdapter = CarAdapter(
-            requireContext(),
-            onDetailsClick = TODO()
-        )
+        val carAdapter = CarAdapter(requireContext()) { car ->
+            val action = CatalogFragmentDirections.actionCatalogFragmentToCarDetailsFragment(car.id)
+            findNavController().navigate(action)
+        }
         val recyclerView = binding.catalogList
         val emptyState = binding.emptyState
         val menuButton: MaterialButton = view.findViewById(R.id.menu_button)

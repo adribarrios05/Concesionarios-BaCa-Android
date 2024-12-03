@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -35,7 +36,7 @@ class CarAdapter(
                 }
 
                 btnViewDetails.setOnClickListener {
-                    // TODO() nav button
+                    onDetailsClick(car)
                 }
             }
         }
