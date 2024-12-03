@@ -98,7 +98,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     //Material
-    implementation (libs.androidx.material3)
+    implementation (libs.material)
 
 }
 

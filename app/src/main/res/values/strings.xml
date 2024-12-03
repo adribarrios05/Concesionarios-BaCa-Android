@@ -5,4 +5,14 @@
     <string name="ver_mas_button">Ver más</string>
     <string name="app_logo" />
     <string name="menu_button" />
+    <string name="button_text" />
+    <string name="inicio">Inicio</string>
+    <string name="cat_logo">Catálogo</string>
+    <string name="perfil">Perfil</string>
+    <string name="car_image">Imagen del coche</string>
+    <string name="car_price">Precio: $%1$.2f</string>
+    <string name="car_horse_power">Caballos: %1$d</string>
+    <string name="car_doors">Puertas: %1$d</string>
+    <string name="car_type">Tipo: %1$s</string>
+    <string name="car_color">Color: %1$s</string>
 </resources>

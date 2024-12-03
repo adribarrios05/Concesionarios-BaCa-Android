@@ -13,8 +13,10 @@ import com.example.concesionariosbaca.databinding.CatalogItemBinding
 import com.example.concesionariosbaca.model.entities.CarEntity
 
 
-class CarAdapter(private val context: Context):
-    ListAdapter<CarEntity, CarAdapter.CarViewHolder>(CarDiffCallback()) {
+class CarAdapter(
+    private val context: Context,
+    private val onDetailsClick: (CarEntity) -> Unit
+): ListAdapter<CarEntity, CarAdapter.CarViewHolder>(CarDiffCallback()) {
 
 
 
@@ -26,10 +28,10 @@ class CarAdapter(private val context: Context):
             binding.apply {
                 carName.text = "${car.brand} ${car.model}"
 
-                carImage.load(car.pictureUrl) {
+                carImage.load(car.pictureUrl ?: R.color.blue) {
+                    crossfade(true)
                     placeholder(R.color.dark_red)
                     error(R.color.black)
-                    crossfade(true)
                 }
 
                 btnViewDetails.setOnClickListener {

@@ -1,39 +1,31 @@
-package com.example.concesionariosbaca.ui.catalog
+package com.example.concesionariosbaca.ui.carDetails
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.concesionariosbaca.model.entities.CarEntity
 import com.example.concesionariosbaca.model.repository.CarRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
-class CatalogViewModel @Inject constructor(
+class CarDetailsViewModel(
     private val carRepository: CarRepository
 ): ViewModel() {
 
-    private val _catalog = MutableStateFlow<List<CarEntity>?>(null)
-    val catalog: StateFlow<List<CarEntity>?>
-        get() = _catalog.asStateFlow()
+    private val _carDetails = MutableStateFlow<CarEntity?>(null)
+    val carDetails: StateFlow<CarEntity?>
+        get() = _carDetails.asStateFlow()
 
-    init{
-        loadLocalCarsFromApi()
-        getCars()
-    }
-
-    private fun getCars() {
+    fun getCarDetails(carId: String) {
         viewModelScope.launch {
             try {
-                val cars = carRepository.getCars()
-                _catalog.value = cars
-            } catch (e: Exception) {
-                _catalog.value = emptyList()
+                val car = carRepository.getCar(carId)
+                _carDetails.value = car
+            } catch (e: Exception){
+                _carDetails.value = null
             }
         }
     }

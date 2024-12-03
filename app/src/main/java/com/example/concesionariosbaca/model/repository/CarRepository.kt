@@ -30,6 +30,21 @@ class CarRepository @Inject constructor(
         }
     }
 
+    suspend fun getCar(carId: String): CarEntity {
+        return try {
+            val apiResponse: CarResponse = apiService.getCar(carId)
+            if(apiResponse.data.isNotEmpty()){
+                apiResponse.data.map { carData ->
+                    mapCarDataToEntity(carData)
+                }
+            } else {
+                carDao.readOne(carId)
+            }
+        } catch (e: Exception){
+            carDao.readOne(carId)
+        }
+    }
+
     suspend fun loadLocalCarsFromApi() {
         withContext(Dispatchers.IO) {
             try {

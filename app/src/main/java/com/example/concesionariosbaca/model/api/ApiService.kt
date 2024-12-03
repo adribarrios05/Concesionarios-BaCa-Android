@@ -20,7 +20,7 @@ interface ApiService {
     suspend fun getCars(): CarResponse
 
     @GET("car")
-    suspend fun getCar(): CarEntity
+    suspend fun getCar(id: String): CarResponse
 
     @GET("customer")
     suspend fun getCustomer(id: String): List<CustomerEntity>
