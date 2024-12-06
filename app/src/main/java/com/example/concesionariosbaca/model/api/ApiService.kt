@@ -1,15 +1,16 @@
 package com.example.concesionariosbaca.model.api
 
-import com.example.concesionariosbaca.model.entities.AppUserEntity
-import com.example.concesionariosbaca.model.entities.CarEntity
 import com.example.concesionariosbaca.model.entities.CustomerEntity
+import com.example.concesionariosbaca.model.entities.UserEntity
 import com.example.concesionariosbaca.model.mapping.CarResponse
-import dagger.Provides
-import retrofit2.Call
+import com.example.concesionariosbaca.model.entities.RegisterCustomer
+import com.example.concesionariosbaca.model.entities.RegisterUser
+import com.example.concesionariosbaca.model.entities.RegisterUserResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 import javax.inject.Inject
@@ -23,11 +24,24 @@ interface ApiService {
     @GET("car/{id}")
     suspend fun getCar(@Path("id") id: String): CarResponse
 
-    @GET("customer")
-    suspend fun getCustomer(id: String): List<CustomerEntity>
+    @GET("customers")
+    suspend fun getCustomers(): List<CustomerEntity>
 
-    @GET("app-user")
-    suspend fun getUser(id: String): List<AppUserEntity>
+    @GET("customer/{id}")
+    suspend fun getCustomer(id: String): CustomerEntity
+
+    @GET("user")
+    suspend fun getUser(id: String): List<UserEntity>
+
+    @POST("auth/local/register")
+    suspend fun registerUser(@Body registerUser: RegisterUser): RegisterUserResponse
+
+    @POST("customers")
+    suspend fun registerCustomer(
+        @Header("Authorization") token: String,
+        @Body registerCustomer: RegisterCustomer
+    )
+
 }
 
 @Singleton

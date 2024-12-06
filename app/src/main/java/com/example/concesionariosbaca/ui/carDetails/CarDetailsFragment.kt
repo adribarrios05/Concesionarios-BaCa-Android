@@ -5,15 +5,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import coil.load
 import com.example.concesionariosbaca.R
 import com.example.concesionariosbaca.databinding.FragmentCarDetailsBinding
 import com.example.concesionariosbaca.model.entities.CarEntity
+import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -35,6 +38,9 @@ class CarDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val menuButton: MaterialButton = view.findViewById(R.id.menu_button)
+        val popupMenu = PopupMenu(requireContext(), menuButton)
+        val backButton: MaterialButton = view.findViewById(R.id.back_button)
         val carId = arguments?.getString("carId")
         if (carId != null) {
             carDetailsViewModel.getCarDetails(carId)
@@ -45,6 +51,32 @@ class CarDetailsFragment : Fragment() {
                 carDetailsViewModel.carDetails.collect { car ->
                     car?.let { displayCarDetails(it) }
                 }
+            }
+        }
+
+        backButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        menuButton.setOnClickListener {
+            popupMenu.show()
+        }
+
+        popupMenu.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.item1 -> {
+
+                    true
+                }
+                R.id.item2 -> {
+
+                    true
+                }
+                R.id.item3 -> {
+
+                    true
+                }
+                else -> false
             }
         }
     }

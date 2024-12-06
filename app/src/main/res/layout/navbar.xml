@@ -8,12 +8,22 @@
     android:elevation="4dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
+    <!-- Botón de volver -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:backgroundTint="@color/dark_red"
+        android:contentDescription="@string/back_button"
+        app:icon="@drawable/baseline_arrow_back_24"
+        app:iconTint="@color/white" />
     <!-- Logo de la aplicación -->
     <ImageView
         android:id="@+id/app_logo"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
+        android:layout_gravity="center"
         android:src="@drawable/ic_app_logo"
         android:contentDescription="@string/app_logo" />
 

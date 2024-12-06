@@ -6,8 +6,8 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.example.concesionariosbaca.model.entities.CarEntity
-import com.example.concesionariosbaca.model.entities.AppUserEntity
 import com.example.concesionariosbaca.model.entities.CustomerEntity
+import com.example.concesionariosbaca.model.entities.UserEntity
 
 import kotlinx.coroutines.flow.Flow
 
@@ -34,6 +34,6 @@ interface CustomerDao {
     @Query("SELECT * FROM customer LEFT OUTER JOIN car ON customer.id = car.customerId")
     suspend fun readOwnerOfCar():Map<CustomerEntity, List<CarEntity>>
 
-    @Query("SELECT * FROM customer LEFT OUTER JOIN appUser ON customer.userId = appUser.id")
-    suspend fun readUserOfCustomer(): Map<CustomerEntity, AppUserEntity>
+    @Query("SELECT * FROM customer LEFT OUTER JOIN user ON customer.userId = user.id")
+    suspend fun readUserOfCustomer(): Map<CustomerEntity, UserEntity>
 }
