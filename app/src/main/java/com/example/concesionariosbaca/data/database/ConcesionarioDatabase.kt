@@ -1,10 +1,10 @@
-package com.example.concesionariosbaca.model.database
+package com.example.concesionariosbaca.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.example.concesionariosbaca.model.entities.CarEntity
-import com.example.concesionariosbaca.model.entities.CustomerEntity
-import com.example.concesionariosbaca.model.entities.UserEntity
+import com.example.concesionariosbaca.data.entities.CarEntity
+import com.example.concesionariosbaca.data.entities.CustomerEntity
+import com.example.concesionariosbaca.data.entities.UserEntity
 
 @Database(
     entities =[CarEntity::class,

@@ -1,4 +1,4 @@
-package com.example.concesionariosbaca.model.mapping
+package com.example.concesionariosbaca.data.mapping
 
 data class CarResponse(
     val data: List<CarData>,

@@ -1,4 +1,4 @@
-package com.example.concesionariosbaca.model.entities
+package com.example.concesionariosbaca.data.entities
 
 data class RegisterUser(
     val email: String,
@@ -19,6 +19,14 @@ data class RegisterCustomer(
     val dni: String,
     val phone: String,
     val age: String,
-    val carRentId: Int?,
-    val userId: Int?
+)
+
+data class LoginUser(
+    val identifier: String,
+    val password: String
+)
+
+data class LoginResponse(
+    val jwt: String,
+    val user: UserEntity
 )

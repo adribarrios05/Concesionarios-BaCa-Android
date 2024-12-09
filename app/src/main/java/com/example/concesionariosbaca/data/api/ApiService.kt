@@ -1,11 +1,13 @@
-package com.example.concesionariosbaca.model.api
+package com.example.concesionariosbaca.data.api
 
-import com.example.concesionariosbaca.model.entities.CustomerEntity
-import com.example.concesionariosbaca.model.entities.UserEntity
-import com.example.concesionariosbaca.model.mapping.CarResponse
-import com.example.concesionariosbaca.model.entities.RegisterCustomer
-import com.example.concesionariosbaca.model.entities.RegisterUser
-import com.example.concesionariosbaca.model.entities.RegisterUserResponse
+import com.example.concesionariosbaca.data.entities.CustomerEntity
+import com.example.concesionariosbaca.data.entities.LoginResponse
+import com.example.concesionariosbaca.data.entities.LoginUser
+import com.example.concesionariosbaca.data.entities.UserEntity
+import com.example.concesionariosbaca.data.mapping.CarResponse
+import com.example.concesionariosbaca.data.entities.RegisterCustomer
+import com.example.concesionariosbaca.data.entities.RegisterUser
+import com.example.concesionariosbaca.data.entities.RegisterUserResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
@@ -42,12 +44,14 @@ interface ApiService {
         @Body registerCustomer: RegisterCustomer
     )
 
+    @POST("auth/local")
+    suspend fun login(@Body loginUser: LoginUser): LoginResponse
 }
 
 @Singleton
 class ConcesionarioService @Inject constructor() {
     private val retrofit = Retrofit.Builder()
-        .baseUrl("https://172.31.22.157:1337/api/")
+        .baseUrl("http://192.168.1.131:1337/api/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 

@@ -2,8 +2,8 @@ package com.example.concesionariosbaca.ui.carDetails
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.concesionariosbaca.model.entities.CarEntity
-import com.example.concesionariosbaca.model.repository.CarRepository
+import com.example.concesionariosbaca.data.entities.CarEntity
+import com.example.concesionariosbaca.data.repository.CarRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

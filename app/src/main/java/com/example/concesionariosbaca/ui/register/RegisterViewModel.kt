@@ -1,15 +1,21 @@
 package com.example.concesionariosbaca.ui.register
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
-import com.example.concesionariosbaca.model.repository.AuthRepository
+import androidx.lifecycle.viewModelScope
+import com.example.concesionariosbaca.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ): ViewModel() {
+
+    val jwtToken: LiveData<String?> = authRepository.getJwtToken().asLiveData()
 
     fun register(
         email: String,
@@ -20,7 +26,6 @@ class RegisterViewModel @Inject constructor(
         dni: String,
         phone: String,
         age: String,
-        carRentId: Int?
     ) = liveData {
         try {
             val userRegistered = authRepository.registerUser(email, password, username)
@@ -32,7 +37,7 @@ class RegisterViewModel @Inject constructor(
                 dni = dni,
                 phone = phone,
                 age = age,
-                carRentId = carRentId,
+                carRentId = null,
                 userId = userRegistered.userId.toInt()
             )
 
@@ -42,4 +47,15 @@ class RegisterViewModel @Inject constructor(
         }
     }
 
+    fun saveJwtToken(token: String) {
+        viewModelScope.launch {
+            authRepository.saveJwtToken(token)
+        }
+    }
+
+    fun clearJwtToken() {
+        viewModelScope.launch {
+            authRepository.clearJwtToken()
+        }
+    }
 }

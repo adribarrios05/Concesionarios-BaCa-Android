@@ -1,13 +1,13 @@
-package com.example.concesionariosbaca.model.repository
+package com.example.concesionariosbaca.data.repository
 
-import com.example.concesionariosbaca.model.api.ApiService
-import com.example.concesionariosbaca.model.database.CarDao
-import com.example.concesionariosbaca.model.entities.CarEntity
-import com.example.concesionariosbaca.model.mapping.CarData
-import com.example.concesionariosbaca.model.mapping.CarResponse
+import android.util.Log
+import com.example.concesionariosbaca.data.api.ApiService
+import com.example.concesionariosbaca.data.database.CarDao
+import com.example.concesionariosbaca.data.entities.CarEntity
+import com.example.concesionariosbaca.data.mapping.CarData
+import com.example.concesionariosbaca.data.mapping.CarResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.Call
 import javax.inject.Inject
 
 class CarRepository @Inject constructor(
@@ -34,14 +34,22 @@ class CarRepository @Inject constructor(
         return try {
             val apiResponse: CarResponse = apiService.getCar(carId)
             if(apiResponse.data.isNotEmpty()){
-                mapCarDataToEntity(apiResponse.data.first())
+                val car = mapCarDataToEntity(apiResponse.data.first())
+                Log.d("CarRepository", "Car fetched from API: $car")
+                car
             } else {
-                carDao.readOne(carId)
+                carDao.readOne(carId).also {
+                    Log.d("CarRepository", "Car fetched from local DB: $it")
+                }
             }
         } catch (e: Exception){
-            carDao.readOne(carId)
+            carDao.readOne(carId).also {
+                Log.e("CarRepository", "Error fetching car: ${e.message}")
+            }
         }
+
     }
+
 
     suspend fun loadLocalCarsFromApi() {
         withContext(Dispatchers.IO) {
@@ -52,9 +60,11 @@ class CarRepository @Inject constructor(
                         mapCarDataToEntity(carData)
                     }
                     carDao.createAll(carEntities) // Guarda en la base local
+                } else {
+
                 }
             } catch (e: Exception) {
-                // TODO() manejar la excepción
+                Log.e("CarRepository", "Error loading cars from API: ${e.message}")
             }
         }
     }
@@ -72,6 +82,7 @@ class CarRepository @Inject constructor(
             pictureUrl = carData.attributes.pictureUrl,
             doors = carData.attributes.doors,
             customerId = carData.attributes.customerId
+
         )
     }
 }

@@ -1,4 +1,4 @@
-package com.example.concesionariosbaca.model.entities
+package com.example.concesionariosbaca.data.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

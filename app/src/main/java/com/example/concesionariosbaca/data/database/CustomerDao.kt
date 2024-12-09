@@ -1,13 +1,13 @@
-package com.example.concesionariosbaca.model.database
+package com.example.concesionariosbaca.data.database
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.concesionariosbaca.model.entities.CarEntity
-import com.example.concesionariosbaca.model.entities.CustomerEntity
-import com.example.concesionariosbaca.model.entities.UserEntity
+import com.example.concesionariosbaca.data.entities.CarEntity
+import com.example.concesionariosbaca.data.entities.CustomerEntity
+import com.example.concesionariosbaca.data.entities.UserEntity
 
 import kotlinx.coroutines.flow.Flow
 

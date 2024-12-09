@@ -59,6 +59,7 @@ dependencies {
 
     // Room Database
     implementation (libs.androidx.room.runtime)
+    implementation(libs.androidx.annotation)
     kapt (libs.androidx.room.room.compiler3)
     implementation (libs.androidx.room.ktx)
 
@@ -100,6 +101,9 @@ dependencies {
 
     //Material
     implementation (libs.material)
+
+    //DataStore
+    implementation (libs.androidx.datastore.preferences)
 
 }
 

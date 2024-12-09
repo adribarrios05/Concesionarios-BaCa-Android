@@ -15,6 +15,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.concesionariosbaca.R
+import com.example.concesionariosbaca.data.entities.CarEntity
 import com.example.concesionariosbaca.databinding.FragmentCatalogBinding
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,7 +47,8 @@ class CatalogFragment : Fragment() {
         val emptyState = binding.emptyState
         val menuButton: MaterialButton = view.findViewById(R.id.menu_button)
         val popupMenu = PopupMenu(requireContext(), menuButton)
-        popupMenu.inflate(R.menu.main_menu)
+        val backButton: MaterialButton = view.findViewById(R.id.back_button)
+        popupMenu.menuInflater.inflate(R.menu.main_menu, popupMenu.menu)
 
         recyclerView.apply {
             adapter = carAdapter
@@ -68,6 +70,9 @@ class CatalogFragment : Fragment() {
             }
         }
 
+        backButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
         menuButton.setOnClickListener {
             popupMenu.show()
@@ -80,11 +85,11 @@ class CatalogFragment : Fragment() {
                     true
                 }
                 R.id.item2 -> {
-
+                    findNavController().navigate(R.id.catalogFragment)
                     true
                 }
                 R.id.item3 -> {
-
+                    findNavController().navigate(R.id.loginFragment)
                     true
                 }
                 else -> false
@@ -92,4 +97,5 @@ class CatalogFragment : Fragment() {
         }
 
     }
+
 }

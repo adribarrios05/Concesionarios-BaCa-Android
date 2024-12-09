@@ -1,22 +1,15 @@
 package com.example.concesionariosbaca.di
 
-import android.app.Application
 import android.content.Context
 import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.concesionariosbaca.model.database.ConcesionarioDatabase
-import com.example.concesionariosbaca.model.database.CarDao
-import com.example.concesionariosbaca.model.entities.CarEntity
+import com.example.concesionariosbaca.data.database.ConcesionarioDatabase
+import com.example.concesionariosbaca.data.database.CarDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.util.concurrent.Executors
 import javax.inject.Singleton
 
 @Module
@@ -31,7 +24,9 @@ object LocalModule {
             context,
             ConcesionarioDatabase::class.java,
             "concesionarios_db"
-        ).build()
+        )
+            //.fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides

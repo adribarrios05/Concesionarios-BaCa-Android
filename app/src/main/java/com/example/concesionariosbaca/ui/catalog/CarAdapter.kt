@@ -4,14 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.Navigation.findNavController
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.concesionariosbaca.R
 import com.example.concesionariosbaca.databinding.CatalogItemBinding
-import com.example.concesionariosbaca.model.entities.CarEntity
+import com.example.concesionariosbaca.data.entities.CarEntity
 
 
 class CarAdapter(
@@ -36,6 +36,7 @@ class CarAdapter(
                 }
 
                 btnViewDetails.setOnClickListener {
+                    Toast.makeText(binding.root.context, "Car ID: ${car.id}", Toast.LENGTH_SHORT).show()
                     onDetailsClick(car)
                 }
             }

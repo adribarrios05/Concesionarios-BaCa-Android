@@ -2,10 +2,12 @@ package com.example.concesionariosbaca.ui.carDetails
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -15,7 +17,7 @@ import androidx.navigation.fragment.findNavController
 import coil.load
 import com.example.concesionariosbaca.R
 import com.example.concesionariosbaca.databinding.FragmentCarDetailsBinding
-import com.example.concesionariosbaca.model.entities.CarEntity
+import com.example.concesionariosbaca.data.entities.CarEntity
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -41,10 +43,9 @@ class CarDetailsFragment : Fragment() {
         val menuButton: MaterialButton = view.findViewById(R.id.menu_button)
         val popupMenu = PopupMenu(requireContext(), menuButton)
         val backButton: MaterialButton = view.findViewById(R.id.back_button)
-        val carId = arguments?.getString("carId")
-        if (carId != null) {
-            carDetailsViewModel.getCarDetails(carId)
-        }
+        val carId = CarDetailsFragmentArgs.fromBundle(requireArguments()).carId
+        carDetailsViewModel.getCarDetails(carId)
+
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -53,6 +54,8 @@ class CarDetailsFragment : Fragment() {
                 }
             }
         }
+        carDetailsViewModel.getCarDetails(carId)
+
 
         backButton.setOnClickListener {
             findNavController().popBackStack()
@@ -69,11 +72,11 @@ class CarDetailsFragment : Fragment() {
                     true
                 }
                 R.id.item2 -> {
-
+                    findNavController().navigate(R.id.catalogFragment)
                     true
                 }
                 R.id.item3 -> {
-
+                    findNavController().navigate(R.id.loginFragment)
                     true
                 }
                 else -> false
@@ -96,6 +99,7 @@ class CarDetailsFragment : Fragment() {
             carDoors.text = getString(R.string.car_doors, car.doors)
             carType.text = getString(R.string.car_type, car.type)
             carColor.text = getString(R.string.car_color, car.color)
+            Log.d("CarDetailsFragment", "Displaying car: ${car.brand} ${car.model}")
         }
     }
 }
