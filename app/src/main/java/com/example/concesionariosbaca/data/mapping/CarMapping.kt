@@ -1,5 +1,7 @@
 package com.example.concesionariosbaca.data.mapping
 
+import com.example.concesionariosbaca.data.entities.CarEntity
+
 data class CarResponse(
     val data: List<CarData>,
     val meta: Meta
@@ -66,3 +68,20 @@ fun mapPictureToUrl(picture: PictureData?): String? {
         ?: picture?.data?.attributes?.medium?.url
         ?: picture?.data?.attributes?.url
 }
+fun CarData.toCarEntity(): CarEntity {
+    return CarEntity(
+        id = this.id.toString(),
+        brand = this.attributes.brand,
+        model = this.attributes.model,
+        horsePower = this.attributes.horsePower,
+        description = this.attributes.description,
+        price = this.attributes.price,
+        color = this.attributes.color,
+        type = this.attributes.type,
+        plate = this.attributes.plate,
+        doors = this.attributes.doors,
+        pictureUrl = this.attributes.pictureUrl,
+        customerId = this.attributes.customerId
+    )
+}
+

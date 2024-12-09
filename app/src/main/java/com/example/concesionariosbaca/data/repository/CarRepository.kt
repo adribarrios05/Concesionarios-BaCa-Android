@@ -5,84 +5,74 @@ import com.example.concesionariosbaca.data.api.ApiService
 import com.example.concesionariosbaca.data.database.CarDao
 import com.example.concesionariosbaca.data.entities.CarEntity
 import com.example.concesionariosbaca.data.mapping.CarData
-import com.example.concesionariosbaca.data.mapping.CarResponse
+import com.example.concesionariosbaca.data.mapping.toCarEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.Response
 import javax.inject.Inject
 
 class CarRepository @Inject constructor(
     private val apiService: ApiService,
     private val carDao: CarDao
-){
+) {
 
+    // Obtener todos los coches
     suspend fun getCars(): List<CarEntity> {
         return try {
-            val apiResponse: CarResponse = apiService.getCars()
-            if (apiResponse.data.isNotEmpty()) {
-                apiResponse.data.map { carData ->
-                    mapCarDataToEntity(carData)
-                }
+            val response = apiService.getCars()
+            if (response.isSuccessful) {
+                val cars = response.body()?.data?.map { it.toCarEntity() } ?: emptyList()
+                carDao.createAll(cars) // Guarda los coches en la base de datos local
+                Log.d("CarRepository", "Cars fetched from API: $cars")
+                cars
             } else {
-                carDao.readAll() // Si la API está vacía, devuelve datos locales
+                Log.e("CarRepository", "Error fetching cars from API: ${response.errorBody()}")
+                carDao.readAll() // Devuelve datos locales en caso de error
             }
         } catch (e: Exception) {
-            carDao.readAll() // En caso de error, devuelve datos locales
+            Log.e("CarRepository", "Exception fetching cars: ${e.message}")
+            carDao.readAll() // Devuelve datos locales si ocurre una excepción
         }
     }
 
+    // Obtener un coche específico por su ID
     suspend fun getCar(carId: String): CarEntity {
         return try {
-            val apiResponse: CarResponse = apiService.getCar(carId)
-            if(apiResponse.data.isNotEmpty()){
-                val car = mapCarDataToEntity(apiResponse.data.first())
-                Log.d("CarRepository", "Car fetched from API: $car")
-                car
-            } else {
-                carDao.readOne(carId).also {
-                    Log.d("CarRepository", "Car fetched from local DB: $it")
+            val response = apiService.getCar(carId)
+            if (response.isSuccessful) {
+                val car = response.body()?.data?.first()?.toCarEntity()
+                if (car != null) {
+                    Log.d("CarRepository", "Car fetched from API: $car")
+                    car
+                } else {
+                    Log.e("CarRepository", "Car not found in API for ID: $carId")
+                    carDao.readOne(carId)
                 }
+            } else {
+                Log.e("CarRepository", "Error fetching car from API: ${response.errorBody()}")
+                carDao.readOne(carId)
             }
-        } catch (e: Exception){
-            carDao.readOne(carId).also {
-                Log.e("CarRepository", "Error fetching car: ${e.message}")
-            }
+        } catch (e: Exception) {
+            Log.e("CarRepository", "Exception fetching car: ${e.message}")
+            carDao.readOne(carId)
         }
-
     }
 
-
+    // Cargar coches desde la API y almacenarlos localmente
     suspend fun loadLocalCarsFromApi() {
         withContext(Dispatchers.IO) {
             try {
-                val apiResponse: CarResponse = apiService.getCars()
-                if (apiResponse.data.isNotEmpty()) {
-                    val carEntities = apiResponse.data.map { carData ->
-                        mapCarDataToEntity(carData)
-                    }
-                    carDao.createAll(carEntities) // Guarda en la base local
+                val response = apiService.getCars()
+                if (response.isSuccessful) {
+                    val cars = response.body()?.data?.map { it.toCarEntity() } ?: emptyList()
+                    carDao.createAll(cars) // Guarda los datos localmente
+                    Log.d("CarRepository", "Local DB updated with cars from API")
                 } else {
-
+                    Log.e("CarRepository", "Error fetching cars for local DB: ${response.errorBody()}")
                 }
             } catch (e: Exception) {
-                Log.e("CarRepository", "Error loading cars from API: ${e.message}")
+                Log.e("CarRepository", "Exception updating local DB: ${e.message}")
             }
         }
-    }
-    private fun mapCarDataToEntity(carData: CarData): CarEntity {
-        return CarEntity(
-            id = carData.id.toString(),
-            brand = carData.attributes.brand,
-            model = carData.attributes.model,
-            horsePower = carData.attributes.horsePower,
-            description = carData.attributes.description,
-            color = carData.attributes.color,
-            type = carData.attributes.type,
-            price = carData.attributes.price,
-            plate = carData.attributes.plate,
-            pictureUrl = carData.attributes.pictureUrl,
-            doors = carData.attributes.doors,
-            customerId = carData.attributes.customerId
-
-        )
     }
 }

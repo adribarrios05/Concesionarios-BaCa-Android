@@ -1,21 +1,20 @@
 package com.example.concesionariosbaca.ui.register
 
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Email
+import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.concesionariosbaca.R
-import com.example.concesionariosbaca.databinding.FragmentCatalogBinding
 import com.example.concesionariosbaca.databinding.FragmentRegisterBinding
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RegisterFragment : Fragment() {
@@ -27,7 +26,6 @@ class RegisterFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -38,7 +36,8 @@ class RegisterFragment : Fragment() {
         val menuButton: MaterialButton = view.findViewById(R.id.menu_button)
         val popupMenu = PopupMenu(requireContext(), menuButton)
         val backButton: MaterialButton = view.findViewById(R.id.back_button)
-        binding.registerButton.setOnClickListener{
+
+        binding.registerButton.setOnClickListener {
             val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
             val username = binding.usernameEditText.text.toString()
@@ -48,8 +47,10 @@ class RegisterFragment : Fragment() {
             val phone = binding.phoneEditText.text.toString()
             val age = binding.ageEditText.text.toString()
 
-            if(validateInput(email, password, username, name, surname, dni, phone, age)) {
-                register(email, password, username, name, surname, dni, phone, age)
+            if (validateInput(email, password, username, name, surname, dni, phone, age)) {
+                lifecycleScope.launch {
+                    register(email, password, username, name, surname, dni, phone, age)
+                }
             }
         }
 
@@ -68,7 +69,7 @@ class RegisterFragment : Fragment() {
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.item1 -> {
-
+                    // Acción para item1
                     true
                 }
                 R.id.item2 -> {
@@ -96,8 +97,8 @@ class RegisterFragment : Fragment() {
     ): Boolean {
         return when {
             email.isEmpty() || password.isEmpty() || username.isEmpty() ||
-            name.isEmpty() || surname.isEmpty() || dni.isEmpty() ||
-            phone.isEmpty() || age.isEmpty() -> {
+                    name.isEmpty() || surname.isEmpty() || dni.isEmpty() ||
+                    phone.isEmpty() || age.isEmpty() -> {
                 Toast.makeText(context, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
                 false
             }
@@ -109,7 +110,7 @@ class RegisterFragment : Fragment() {
         }
     }
 
-    private fun register(
+    private suspend fun register(
         email: String,
         password: String,
         username: String,
@@ -117,18 +118,20 @@ class RegisterFragment : Fragment() {
         surname: String,
         dni: String,
         phone: String,
-        age: String,
+        age: String
     ) {
-        registerViewModel.register(email, password, username, name, surname, dni, phone, age)
-            .observe(viewLifecycleOwner, Observer { result ->
-                result.onSuccess {
-                    Toast.makeText(context, "Cliente registrado exitosamente", Toast.LENGTH_SHORT).show()
-                    navigateToLogin()
-                }
-                result.onFailure {
-                    Toast.makeText(context, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
-                }
-            })
+        try {
+            val result = registerViewModel.register(email, password, username, name, surname, dni, phone, age)
+            if (result.isSuccess) {
+                Toast.makeText(context, "Cliente registrado exitosamente", Toast.LENGTH_SHORT).show()
+                navigateToLogin()
+            } else {
+                val error = result.exceptionOrNull()?.message ?: "Error desconocido"
+                Toast.makeText(context, "Error: $error", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            Toast.makeText(context, "Error inesperado: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun navigateToLogin() {
@@ -138,5 +141,4 @@ class RegisterFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
     }
-
 }

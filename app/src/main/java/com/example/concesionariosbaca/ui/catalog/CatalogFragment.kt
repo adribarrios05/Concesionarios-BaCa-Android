@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.concesionariosbaca.R
 import com.example.concesionariosbaca.data.entities.CarEntity
 import com.example.concesionariosbaca.databinding.FragmentCatalogBinding
+import com.example.concesionariosbaca.ui.login.ui.login.LoginViewModel
+import com.example.concesionariosbaca.ui.profile.ProfileViewModel
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -26,6 +28,8 @@ class CatalogFragment : Fragment() {
 
     private lateinit var binding: FragmentCatalogBinding
     private val catalogViewModel: CatalogViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels()
+    private val profileViewModel: ProfileViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -88,8 +92,15 @@ class CatalogFragment : Fragment() {
                     findNavController().navigate(R.id.catalogFragment)
                     true
                 }
-                R.id.item3 -> {
-                    findNavController().navigate(R.id.loginFragment)
+                R.id.item3 -> { // Perfil
+                    lifecycleScope.launch {
+                        val isLoggedIn = profileViewModel.isUserLoggedIn()
+                        if (isLoggedIn) {
+                            findNavController().navigate(R.id.action_catalogFragment_to_profileFragment)
+                        } else {
+                            findNavController().navigate(R.id.action_catalogFragment_to_loginFragment)
+                        }
+                    }
                     true
                 }
                 else -> false

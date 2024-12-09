@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.concesionariosbaca.data.database.ConcesionarioDatabase
 import com.example.concesionariosbaca.data.database.CarDao
+import com.example.concesionariosbaca.data.database.UserDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,5 +33,10 @@ object LocalModule {
     @Provides
     fun provideCarDao(database: ConcesionarioDatabase): CarDao {
         return database.carDao()
+    }
+
+    @Provides
+    fun provideUserDao(database: ConcesionarioDatabase): UserDao {
+        return database.userDao()
     }
 }

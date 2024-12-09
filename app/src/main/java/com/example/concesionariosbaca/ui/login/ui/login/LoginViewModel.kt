@@ -3,53 +3,49 @@ package com.example.concesionariosbaca.ui.login.ui.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import android.util.Patterns
+import androidx.lifecycle.viewModelScope
 import com.example.concesionariosbaca.R
 import com.example.concesionariosbaca.ui.login.data.LoginRepository
 import com.example.concesionariosbaca.ui.login.data.Result
+import com.example.concesionariosbaca.ui.login.data.model.LoggedInUser
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
-class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
-
-    private val _loginForm = MutableLiveData<LoginFormState>()
-    val loginFormState: LiveData<LoginFormState> = _loginForm
+@HiltViewModel
+class LoginViewModel @Inject constructor(private val loginRepository: LoginRepository) : ViewModel() {
 
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
-
-    fun login(username: String, password: String) {
-        // can be launched in a separate asynchronous job
-        val result = loginRepository.login(username, password)
-
-        if (result is Result.Success) {
-            _loginResult.value =
-                LoginResult(success = LoggedInUserView(displayName = result.data.displayName))
-        } else {
-            _loginResult.value = LoginResult(error = R.string.login_failed)
-        }
+    val isLoggedIn: Flow<Boolean> = loginRepository.getToken().map { token ->
+        !token.isNullOrEmpty()
     }
 
-    fun loginDataChanged(username: String, password: String) {
-        if (!isUserNameValid(username)) {
-            _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
-        } else if (!isPasswordValid(password)) {
-            _loginForm.value = LoginFormState(passwordError = R.string.invalid_password)
-        } else {
-            _loginForm.value = LoginFormState(isDataValid = true)
-        }
+    suspend fun login(username: String, password: String): Result<LoggedInUser> {
+        return loginRepository.login(username, password)
+
+        /*viewModelScope.launch {
+            val result = loginRepository.login(username, password)
+            _loginResult.value = when (result) {
+                is Result.Success -> {
+                    LoginResult(success = LoggedInUserView(username = result.data.username))
+                }
+                is Result.Error -> {
+                    LoginResult(error = R.string.login_failed)
+                }
+            }
+        }*/
     }
 
-    // A placeholder username validation check
-    private fun isUserNameValid(username: String): Boolean {
-        return if (username.contains("@")) {
-            Patterns.EMAIL_ADDRESS.matcher(username).matches()
-        } else {
-            username.isNotBlank()
-        }
+    fun isLoggedIn(): Boolean {
+        return loginRepository.isLoggedIn
     }
 
-    // A placeholder password validation check
-    private fun isPasswordValid(password: String): Boolean {
-        return password.length > 5
+    fun logout() {
+        viewModelScope.launch {
+            loginRepository.logout()
+        }
     }
 }

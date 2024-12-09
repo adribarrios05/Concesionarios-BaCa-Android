@@ -1,6 +1,7 @@
 package com.example.concesionariosbaca.data.repository
 
 import com.example.concesionariosbaca.data.api.ApiService
+import com.example.concesionariosbaca.data.entities.CustomerEntity
 import com.example.concesionariosbaca.data.entities.DataStoreManager
 import com.example.concesionariosbaca.data.entities.LoginResponse
 import com.example.concesionariosbaca.data.entities.LoginUser
@@ -9,6 +10,7 @@ import com.example.concesionariosbaca.data.entities.RegisterUser
 import com.example.concesionariosbaca.data.entities.RegisterUserResponse
 import kotlinx.coroutines.flow.Flow
 import org.intellij.lang.annotations.Identifier
+import retrofit2.Response
 import javax.inject.Inject
 
 class AuthRepository @Inject constructor(
@@ -16,19 +18,25 @@ class AuthRepository @Inject constructor(
     private val dataStoreManager: DataStoreManager
 ) {
 
-    suspend fun registerUser(email: String, password: String, username: String): RegisterUserResponse {
+    suspend fun registerUser(email: String, password: String, username: String): Response<RegisterUserResponse> {
         return apiService.registerUser(RegisterUser(email, password, username))
     }
 
     suspend fun registerCustomer(token: String, name: String, surname: String, dni: String, phone: String,
-                                 age: String) {
-        apiService.registerCustomer(
-            "Bearer $token",
-            RegisterCustomer(name, surname, dni, phone, age)
+                                 age: String, userId: Int): CustomerEntity {
+        val customer = RegisterCustomer(
+            name = name,
+            surname = surname,
+            dni = dni,
+            phone = phone,
+            age = age,
+            userId = userId
         )
+
+        return apiService.registerCustomer("Bearer $token", customer)
     }
 
-    suspend fun loginUser(identifier: String, password: String): LoginResponse{
+    suspend fun loginUser(identifier: String, password: String): Response<LoginResponse>{
         return apiService.login(LoginUser(identifier, password))
     }
 

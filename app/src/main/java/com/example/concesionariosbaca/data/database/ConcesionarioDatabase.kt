@@ -10,10 +10,10 @@ import com.example.concesionariosbaca.data.entities.UserEntity
     entities =[CarEntity::class,
               CustomerEntity::class,
               UserEntity::class],
-    version = 1
+    version = 2
 )
 abstract class ConcesionarioDatabase: RoomDatabase() {
     abstract fun carDao(): CarDao
     abstract fun customerDao(): CustomerDao
-    abstract fun UserDao(): UserDao
+    abstract fun userDao(): UserDao
 }

@@ -7,9 +7,7 @@ data class RegisterUser(
 )
 
 data class RegisterUserResponse(
-    val userId: String,
-    val email: String,
-    val username: String,
+    val user: UserResponse,
     val jwt: String     // Token JWT generado
 )
 
@@ -19,6 +17,7 @@ data class RegisterCustomer(
     val dni: String,
     val phone: String,
     val age: String,
+    val userId: Int
 )
 
 data class LoginUser(
@@ -28,5 +27,16 @@ data class LoginUser(
 
 data class LoginResponse(
     val jwt: String,
-    val user: UserEntity
+    val user: UserResponse
+)
+
+data class UserResponse(
+    val id: String,
+    val username: String,
+    val email: String,
+    val profilePicture: String?)
+
+data class UpdateProfileRequest(
+    val username: String,
+    val email: String
 )
