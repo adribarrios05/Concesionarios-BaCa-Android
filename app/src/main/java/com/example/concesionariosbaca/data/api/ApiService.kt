@@ -62,7 +62,7 @@ interface ApiService {
 @Singleton
 class ConcesionarioService @Inject constructor() {
     val apiService: ApiService = Retrofit.Builder()
-        .baseUrl("http://192.168.1.112:1337/api/")
+        .baseUrl("https://concesionarios-service.onrender.com/api/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(ApiService::class.java)
