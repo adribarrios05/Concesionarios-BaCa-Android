@@ -45,12 +45,15 @@ class RegisterViewModel @Inject constructor(
                             age = age,
                             userId = userRegistered.user.id.toInt()
                         )
+
                         Result.success(Unit)
                     } else {
+                        Log.e("Register Error", "Error code: ${userResponse.code()}, Body: ${userResponse.errorBody()?.string()}")
                         Result.failure(Exception("Error: respuesta del servidor nula"))
                     }
                 } else {
                     Result.failure(Exception("Error: ${userResponse.errorBody()?.string()}"))
+
                 }
             } catch (e: Exception) {
                 Result.failure(e)

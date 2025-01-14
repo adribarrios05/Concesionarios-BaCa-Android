@@ -26,7 +26,7 @@ object LocalModule {
             ConcesionarioDatabase::class.java,
             "concesionarios_db"
         )
-            //.fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration()
             .build()
     }
 

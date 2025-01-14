@@ -1,6 +1,7 @@
 package com.example.concesionariosbaca.ui.register
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -99,11 +100,11 @@ class RegisterFragment : Fragment() {
             email.isEmpty() || password.isEmpty() || username.isEmpty() ||
                     name.isEmpty() || surname.isEmpty() || dni.isEmpty() ||
                     phone.isEmpty() || age.isEmpty() -> {
-                Toast.makeText(context, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Todos los campos son obligatorios", Toast.LENGTH_LONG).show()
                 false
             }
             password.length < 8 -> {
-                Toast.makeText(context, "La contraseña debe tener al menos 8 caracteres", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "La contraseña debe tener al menos 8 caracteres", Toast.LENGTH_LONG).show()
                 false
             }
             else -> true
@@ -128,6 +129,7 @@ class RegisterFragment : Fragment() {
             } else {
                 val error = result.exceptionOrNull()?.message ?: "Error desconocido"
                 Toast.makeText(context, "Error: $error", Toast.LENGTH_SHORT).show()
+                Log.e("Error: ", error)
             }
         } catch (e: Exception) {
             Toast.makeText(context, "Error inesperado: ${e.message}", Toast.LENGTH_SHORT).show()
