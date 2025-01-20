@@ -4,6 +4,9 @@
         <domain includeSubdomains="true">172.31.22.157</domain>
     </domain-config>
     <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">172.31.22.104</domain>
+    </domain-config>
+    <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">192.168.1.109</domain>
     </domain-config>
     <domain-config cleartextTrafficPermitted="true">
@@ -12,5 +15,7 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">192.168.1.131</domain>
     </domain-config>
-
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">localhost</domain>
+    </domain-config>
 </network-security-config>
