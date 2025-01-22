@@ -96,7 +96,7 @@ class CatalogFragment : Fragment() {
                     lifecycleScope.launch {
                         val isLoggedIn = profileViewModel.isUserLoggedIn()
                         if (isLoggedIn) {
-                            findNavController().navigate(R.id.action_catalogFragment_to_profileFragment)
+                           findNavController().navigate(R.id.action_catalogFragment_to_profileFragment)
                         } else {
                             findNavController().navigate(R.id.action_catalogFragment_to_loginFragment)
                         }

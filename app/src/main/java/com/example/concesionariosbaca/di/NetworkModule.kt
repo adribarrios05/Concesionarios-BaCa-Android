@@ -17,7 +17,7 @@ import javax.inject.Singleton
 object NetworkModule {
     private const val apiUrl = "https://concesionarios-service.onrender.com/api/"
     private const val apiLocalUrl = "http://localhost:1337/api/"
-    private const val API_URL = apiLocalUrl
+    private const val API_URL = apiUrl
 
 
 
