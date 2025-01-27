@@ -15,7 +15,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private const val apiUrl = "https://concesionarios-service.onrender.com/api/"
+    private const val apiUrl = "https://concesionarios-baca-service.onrender.com/api/"
     private const val apiLocalUrl = "http://localhost:1337/api/"
     private const val API_URL = apiUrl
 

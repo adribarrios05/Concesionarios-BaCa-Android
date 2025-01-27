@@ -1,5 +1,7 @@
 package com.example.concesionariosbaca.ui.register
 
+import android.app.DatePickerDialog
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Log
 import android.widget.PopupMenu
@@ -8,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -37,6 +40,24 @@ class RegisterFragment : Fragment() {
         val menuButton: MaterialButton = view.findViewById(R.id.menu_button)
         val popupMenu = PopupMenu(requireContext(), menuButton)
         val backButton: MaterialButton = view.findViewById(R.id.back_button)
+        val ageEditText: EditText = view.findViewById(R.id.ageEditText)
+
+        ageEditText.setOnClickListener{
+            val calendar = Calendar.getInstance()
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+            val datePickerDialog = DatePickerDialog(
+                requireContext(),
+                { _, selectedYear, selectedMonth, selectedDay ->
+                    val date = "${selectedMonth + 1}/$selectedDay/$selectedYear"
+                    ageEditText.setText(date)
+                },
+                year, month, day
+            )
+            datePickerDialog.show()
+        }
 
         binding.registerButton.setOnClickListener {
             val email = binding.emailEditText.text.toString()

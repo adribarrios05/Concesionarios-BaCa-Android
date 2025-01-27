@@ -20,15 +20,18 @@ class CarRepository @Inject constructor(
     suspend fun getCars(): List<CarEntity> {
         return try {
             val response = apiService.getCars()
+            Log.d("CarRepository", "API Response: ${response.body()}")
+
             if (response.isSuccessful) {
                 val cars = response.body()?.data?.map { it.toCarEntity() } ?: emptyList()
                 carDao.createAll(cars) // Guarda los coches en la base de datos local
                 Log.d("CarRepository", "Cars fetched from API: $cars")
-                cars
+                return cars
             } else {
                 Log.e("CarRepository", "Error fetching cars from API: ${response.errorBody()}")
-                carDao.readAll() // Devuelve datos locales en caso de error
+                return carDao.readAll() // Devuelve datos locales en caso de error
             }
+
         } catch (e: Exception) {
             Log.e("CarRepository", "Exception fetching cars: ${e.message}")
             carDao.readAll() // Devuelve datos locales si ocurre una excepción

@@ -88,8 +88,8 @@ class CarDetailsFragment : Fragment() {
     private fun displayCarDetails(car: CarEntity) {
         binding.apply {
             carImage.load(car.pictureUrl) {
-                placeholder(R.color.dark_red)
-                error(R.color.blue)
+                placeholder(R.drawable.car_img_placeholder)
+                error(R.drawable.car_img_placeholder)
                 crossfade(true)
             }
             carName.text = "${car.brand} ${car.model}"

@@ -36,7 +36,7 @@ class RegisterViewModel @Inject constructor(
                 if (userResponse.isSuccessful) {
                     val userRegistered = userResponse.body()
                     if (userRegistered != null) {
-                        authRepository.registerCustomer(
+                        val customerResponse = authRepository.registerCustomer(
                             token = userRegistered.jwt,
                             name = name,
                             surname = surname,
@@ -45,7 +45,6 @@ class RegisterViewModel @Inject constructor(
                             age = age,
                             userId = userRegistered.user.id.toInt()
                         )
-
                         Result.success(Unit)
                     } else {
                         Log.e("Register Error", "Error code: ${userResponse.code()}, Body: ${userResponse.errorBody()?.string()}")

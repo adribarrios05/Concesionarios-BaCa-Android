@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -31,12 +30,11 @@ class CarAdapter(
 
                 carImage.load(car.pictureUrl ?: R.color.blue) {
                     crossfade(true)
-                    placeholder(R.color.dark_red)
-                    error(R.color.black)
+                    placeholder(R.drawable.car_img_placeholder)
+                    error(R.drawable.car_img_placeholder)
                 }
 
                 btnViewDetails.setOnClickListener {
-                    Toast.makeText(binding.root.context, "Car ID: ${car.id}", Toast.LENGTH_SHORT).show()
                     onDetailsClick(car)
                 }
             }
