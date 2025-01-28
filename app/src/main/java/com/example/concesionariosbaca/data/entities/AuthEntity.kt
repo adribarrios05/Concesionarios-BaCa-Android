@@ -20,6 +20,10 @@ data class RegisterCustomer(
     val userId: Int
 )
 
+data class RegisterCustomerResponse(
+    val customer: RegisterCustomer
+)
+
 data class LoginUser(
     val identifier: String,
     val password: String

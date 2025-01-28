@@ -2,6 +2,7 @@ package com.example.concesionariosbaca.data.api
 
 import com.example.concesionariosbaca.data.entities.*
 import com.example.concesionariosbaca.data.mapping.CarResponse
+import com.example.concesionariosbaca.data.repository.RegisterCustomerRequest
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -39,8 +40,8 @@ interface ApiService {
     @POST("customers")
     suspend fun registerCustomer(
         @Header("Authorization") token: String,
-        @Body registerCustomer: RegisterCustomer
-    ): CustomerEntity
+        @Body registerCustomer: RegisterCustomerRequest
+    ): Response<RegisterCustomerResponse>
 
     // Iniciar sesión
     @POST("auth/local")

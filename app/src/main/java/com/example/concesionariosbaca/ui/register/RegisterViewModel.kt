@@ -36,6 +36,9 @@ class RegisterViewModel @Inject constructor(
                 if (userResponse.isSuccessful) {
                     val userRegistered = userResponse.body()
                     if (userRegistered != null) {
+                        Log.d("RegisterViewModel", "Datos enviados al registrar cliente: name=$name, " +
+                                "surname=$surname, dni=$dni, phone=$phone, age=$age, userId=${userRegistered.user.id.toInt()}")
+
                         val customerResponse = authRepository.registerCustomer(
                             token = userRegistered.jwt,
                             name = name,
@@ -45,16 +48,26 @@ class RegisterViewModel @Inject constructor(
                             age = age,
                             userId = userRegistered.user.id.toInt()
                         )
-                        Result.success(Unit)
+                        Log.d("RegisterViewModel", "Response from registerCustomer: ${customerResponse.body()?.toString()}")
+
+                        if (customerResponse != null) {
+                            Log.d("RegisterViewModel", "Cliente registrado exitosamente: ${customerResponse.body()?.toString()}")
+                            Result.success(Unit)
+                        } else {
+                            Log.e("Register Error", "Error al registrar el cliente: ${customerResponse.body()?.toString()}")
+                            Result.failure(Exception("Error: la respuesta del servidor al registrar el cliente es nula"))
+                        }
                     } else {
                         Log.e("Register Error", "Error code: ${userResponse.code()}, Body: ${userResponse.errorBody()?.string()}")
                         Result.failure(Exception("Error: respuesta del servidor nula"))
                     }
                 } else {
+                    Log.e("Register Error", "Error al registrar el usuario: ${userResponse.errorBody()?.string()}")
                     Result.failure(Exception("Error: ${userResponse.errorBody()?.string()}"))
 
                 }
             } catch (e: Exception) {
+                Log.e("Register Error", "Excepción al registrar: ${e.message}")
                 Result.failure(e)
             }
         }

@@ -1,5 +1,6 @@
 package com.example.concesionariosbaca.ui.register
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.icu.util.Calendar
 import android.os.Bundle
@@ -34,6 +35,7 @@ class RegisterFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("DefaultLocale")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -51,7 +53,7 @@ class RegisterFragment : Fragment() {
             val datePickerDialog = DatePickerDialog(
                 requireContext(),
                 { _, selectedYear, selectedMonth, selectedDay ->
-                    val date = "${selectedMonth + 1}/$selectedDay/$selectedYear"
+                    val date = String.format("%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
                     ageEditText.setText(date)
                 },
                 year, month, day
