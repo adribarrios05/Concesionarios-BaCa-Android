@@ -148,7 +148,7 @@ class RegisterFragment : Fragment() {
             val result = registerViewModel.register(email, password, username, name, surname, dni, phone, age)
             if (result.isSuccess) {
                 Toast.makeText(context, "Cliente registrado exitosamente", Toast.LENGTH_SHORT).show()
-                navigateToLogin()
+                navigateToNextScreen()
             } else {
                 val error = result.exceptionOrNull()?.message ?: "Error desconocido"
                 Toast.makeText(context, "Error: $error", Toast.LENGTH_SHORT).show()
@@ -159,9 +159,14 @@ class RegisterFragment : Fragment() {
         }
     }
 
-    private fun navigateToLogin() {
-        findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+    private fun navigateToNextScreen() {
+        if (registerViewModel.jwtToken.value != null) {
+            findNavController().navigate(R.id.action_registerFragment_to_main_nav_graph)
+        } else {
+            findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+        }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -28,7 +28,6 @@ class CatalogFragment : Fragment() {
 
     private lateinit var binding: FragmentCatalogBinding
     private val catalogViewModel: CatalogViewModel by viewModels()
-    private val loginViewModel: LoginViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
 
     override fun onCreateView(

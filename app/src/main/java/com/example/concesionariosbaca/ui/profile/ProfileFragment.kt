@@ -24,7 +24,13 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
+        val user = profileViewModel.loggedInUser.value
+        if(user == null){
+            findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
+            return null
+        }
+
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -33,12 +39,11 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         profileViewModel.loggedInUser.observe(viewLifecycleOwner) { user ->
-            if (user != null) {
+            if (user == null) {
+                findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
+            } else {
                 binding.usernameEditText.setText(user.username)
                 binding.emailEditText.setText(user.email)
-            } else {
-                Toast.makeText(context, "No hay una sesión activa", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
             }
         }
 

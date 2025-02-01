@@ -19,6 +19,7 @@ import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import com.example.concesionariosbaca.ui.login.data.Result
+import kotlinx.coroutines.delay
 
 
 @AndroidEntryPoint
@@ -39,10 +40,7 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (loginViewModel.isLoggedIn()) {
-            findNavController().navigate(R.id.action_loginFragment_to_catalogFragment)
-            return
-        }
+
 
         val menuButton: MaterialButton = view.findViewById(R.id.menu_button)
         val popupMenu = PopupMenu(requireContext(), menuButton)
@@ -52,7 +50,8 @@ class LoginFragment : Fragment() {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 loginViewModel.isLoggedIn.collect { loggedIn ->
                     if (loggedIn) {
-                        findNavController().navigate(R.id.action_loginFragment_to_catalogFragment)
+                        delay(200)
+                        findNavController().navigate(R.id.action_loginFragment_to_main_nav_graph)
                     }
                 }
             }
@@ -66,11 +65,7 @@ class LoginFragment : Fragment() {
                 when (val result = loginViewModel.login(username, password)) {
                     is Result.Success -> {
                         Toast.makeText(context, "Bienvenido ${result.data.username}", Toast.LENGTH_SHORT).show()
-
-                        val navController = findNavController()
-                        if (navController.currentDestination?.id == R.id.loginFragment) {
-                            navController.navigate(R.id.action_loginFragment_to_catalogFragment)
-                        }
+                        findNavController().navigate(R.id.action_loginFragment_to_main_nav_graph)
                     }
                     is Result.Error -> {
                         Toast.makeText(context, "Error: ${result.exception.message}", Toast.LENGTH_SHORT).show()

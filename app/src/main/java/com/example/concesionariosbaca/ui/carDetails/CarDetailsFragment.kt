@@ -18,6 +18,7 @@ import coil.load
 import com.example.concesionariosbaca.R
 import com.example.concesionariosbaca.databinding.FragmentCarDetailsBinding
 import com.example.concesionariosbaca.data.entities.CarEntity
+import com.example.concesionariosbaca.ui.profile.ProfileViewModel
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -27,6 +28,8 @@ class CarDetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentCarDetailsBinding
     private val carDetailsViewModel: CarDetailsViewModel by viewModels()
+    private val profileViewModel: ProfileViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,8 +78,15 @@ class CarDetailsFragment : Fragment() {
                     findNavController().navigate(R.id.catalogFragment)
                     true
                 }
-                R.id.item3 -> {
-                    findNavController().navigate(R.id.loginFragment)
+                R.id.item3 -> { // Perfil
+                    lifecycleScope.launch {
+                        val isLoggedIn = profileViewModel.isUserLoggedIn()
+                        if (isLoggedIn) {
+                            findNavController().navigate(R.id.action_catalogFragment_to_profileFragment)
+                        } else {
+                            findNavController().navigate(R.id.action_catalogFragment_to_loginFragment)
+                        }
+                    }
                     true
                 }
                 else -> false
