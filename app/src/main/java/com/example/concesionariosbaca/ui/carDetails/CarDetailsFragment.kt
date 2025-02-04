@@ -44,7 +44,7 @@ class CarDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val menuButton: MaterialButton = view.findViewById(R.id.menu_button)
-        val popupMenu = PopupMenu(requireContext(), menuButton)
+        //val popupMenu = PopupMenu(requireContext(), menuButton)
         val backButton: MaterialButton = view.findViewById(R.id.back_button)
         val carId = CarDetailsFragmentArgs.fromBundle(requireArguments()).carId
         carDetailsViewModel.getCarDetails(carId)
@@ -64,7 +64,7 @@ class CarDetailsFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        menuButton.setOnClickListener {
+        /*menuButton.setOnClickListener {
             popupMenu.show()
         }
 
@@ -91,7 +91,7 @@ class CarDetailsFragment : Fragment() {
                 }
                 else -> false
             }
-        }
+        }*/
     }
 
     @SuppressLint("SetTextI18n")

@@ -49,9 +49,9 @@ class CatalogFragment : Fragment() {
         val recyclerView = binding.catalogList
         val emptyState = binding.emptyState
         val menuButton: MaterialButton = view.findViewById(R.id.menu_button)
-        val popupMenu = PopupMenu(requireContext(), menuButton)
+        //val popupMenu = PopupMenu(requireContext(), menuButton)
         val backButton: MaterialButton = view.findViewById(R.id.back_button)
-        popupMenu.menuInflater.inflate(R.menu.main_menu, popupMenu.menu)
+        //popupMenu.menuInflater.inflate(R.menu.main_menu, popupMenu.menu)
 
         recyclerView.apply {
             adapter = carAdapter
@@ -77,11 +77,11 @@ class CatalogFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        menuButton.setOnClickListener {
+        /*menuButton.setOnClickListener {
             popupMenu.show()
-        }
+        }*/
 
-        popupMenu.setOnMenuItemClickListener { item ->
+        /*popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.item1 -> {
 
@@ -104,7 +104,7 @@ class CatalogFragment : Fragment() {
                 }
                 else -> false
             }
-        }
+        }*/
 
     }
 
