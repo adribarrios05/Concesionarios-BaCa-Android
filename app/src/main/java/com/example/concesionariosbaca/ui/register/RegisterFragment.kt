@@ -86,7 +86,7 @@ class RegisterFragment : Fragment() {
             findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }
 
-        menuButton.setOnClickListener {
+        /*menuButton.setOnClickListener {
             popupMenu.show()
         }
 
@@ -101,12 +101,12 @@ class RegisterFragment : Fragment() {
                     true
                 }
                 R.id.item3 -> {
-                    findNavController().navigate(R.id.loginFragment)
+                    findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
                     true
                 }
                 else -> false
             }
-        }
+        }*/
     }
 
     private fun validateInput(
@@ -161,7 +161,7 @@ class RegisterFragment : Fragment() {
 
     private fun navigateToNextScreen() {
         if (registerViewModel.jwtToken.value != null) {
-            findNavController().navigate(R.id.action_registerFragment_to_main_nav_graph)
+            findNavController().navigate(R.id.catalogFragment)
         } else {
             findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }

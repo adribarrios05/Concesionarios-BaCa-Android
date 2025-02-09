@@ -51,7 +51,7 @@ class LoginFragment : Fragment() {
                 loginViewModel.isLoggedIn.collect { loggedIn ->
                     if (loggedIn) {
                         delay(200)
-                        findNavController().navigate(R.id.action_loginFragment_to_main_nav_graph)
+                        findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
                     }
                 }
             }
@@ -65,7 +65,7 @@ class LoginFragment : Fragment() {
                 when (val result = loginViewModel.login(username, password)) {
                     is Result.Success -> {
                         Toast.makeText(context, "Bienvenido ${result.data.username}", Toast.LENGTH_SHORT).show()
-                        findNavController().navigate(R.id.action_loginFragment_to_main_nav_graph)
+                        findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
                     }
                     is Result.Error -> {
                         Toast.makeText(context, "Error: ${result.exception.message}", Toast.LENGTH_SHORT).show()

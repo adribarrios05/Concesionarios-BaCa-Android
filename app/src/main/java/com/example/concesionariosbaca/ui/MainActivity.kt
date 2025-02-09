@@ -5,6 +5,7 @@ import android.widget.PopupMenu
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.concesionariosbaca.R
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity() {
                     if (user != null) {
                         navController.navigate(R.id.profileFragment)
                     } else {
-                        navController.navigate(R.id.auth_nav_graph) // Cambio importante
+                        navController.navigate(R.id.loginFragment)
                     }
                     true
                 }
