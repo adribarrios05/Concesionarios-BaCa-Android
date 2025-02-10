@@ -4,6 +4,7 @@ import com.example.concesionariosbaca.data.api.ApiService
 import com.example.concesionariosbaca.data.entities.DataStoreManager
 import com.example.concesionariosbaca.data.entities.LoginUser
 import com.example.concesionariosbaca.data.entities.UpdateProfileRequest
+import com.example.concesionariosbaca.data.entities.UserEntity
 import com.example.concesionariosbaca.data.mapping.toLoggedInUser
 import com.example.concesionariosbaca.ui.login.data.model.LoggedInUser
 import kotlinx.coroutines.flow.Flow

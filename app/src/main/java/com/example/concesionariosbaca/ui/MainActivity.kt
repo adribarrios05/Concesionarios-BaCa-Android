@@ -1,18 +1,16 @@
 package com.example.concesionariosbaca.ui
 
 import android.os.Bundle
-import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.concesionariosbaca.R
 import com.example.concesionariosbaca.databinding.ActivityMainBinding
 import com.example.concesionariosbaca.ui.profile.ProfileViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,7 +42,16 @@ class MainActivity : AppCompatActivity() {
         profileViewModel.loggedInUser.observe(this) { user ->
             val menuItem = bottomNavigationView.menu.findItem(R.id.profileFragment)
             menuItem.title = if (user != null) "Perfil" else "Iniciar sesión"
+
+            // Si la sesión se inicia y estamos en login, navegar automáticamente a perfil
+            val currentDestination = navController.currentDestination?.id
+            if (user != null && currentDestination == R.id.loginFragment) {
+                navController.navigate(R.id.profileFragment)
+            }
+
         }
+
+
 
         // Manejar navegación en el botón de perfil
         bottomNavigationView.setOnItemSelectedListener { item ->

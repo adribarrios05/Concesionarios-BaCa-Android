@@ -13,7 +13,6 @@ import com.example.concesionariosbaca.R
 import com.example.concesionariosbaca.databinding.FragmentProfileBinding
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.concesionariosbaca.ui.login.data.Result
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -24,13 +23,7 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val user = profileViewModel.loggedInUser.value
-        if(user == null){
-            findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
-            return null
-        }
-
+    ): View {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -47,28 +40,27 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        binding.saveButton.setOnClickListener {
-            val updatedUsername = binding.usernameEditText.text.toString()
-            val updatedEmail = binding.emailEditText.text.toString()
-
-            profileViewModel.updateUserProfile(updatedUsername, updatedEmail).observe(viewLifecycleOwner) { result ->
-                when (result) {
-                    is Result.Success -> {
-                        Toast.makeText(context, "Perfil actualizado correctamente", Toast.LENGTH_SHORT).show()
-                    }
-                    is Result.Error -> {
-                        Toast.makeText(context, "Error al actualizar el perfil: ${result.exception.message}", Toast.LENGTH_SHORT).show()
-                    }
+        profileViewModel.updateResult.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Success -> {
+                    Toast.makeText(context, "Perfil actualizado correctamente", Toast.LENGTH_SHORT).show()
+                }
+                is Result.Error -> {
+                    Toast.makeText(context, "Error al actualizar el perfil: ${result.exception.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
+        binding.saveButton.setOnClickListener {
+            val updatedUsername = binding.usernameEditText.text.toString()
+            val updatedEmail = binding.emailEditText.text.toString()
+            profileViewModel.updateUserProfile(updatedUsername, updatedEmail)
+        }
+
         binding.logoutButton.setOnClickListener {
-            lifecycleScope.launch {
-                profileViewModel.logout()
-                Toast.makeText(context, "Sesión cerrada", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
-            }
+            profileViewModel.logout()
+            Toast.makeText(context, "Sesión cerrada", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
         }
     }
 }
