@@ -51,16 +51,16 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-
-
         // Manejar navegación en el botón de perfil
         bottomNavigationView.setOnItemSelectedListener { item ->
+            val user = profileViewModel.loggedInUser.value
+
             when (item.itemId) {
                 R.id.profileFragment -> {
-                    val user = profileViewModel.loggedInUser.value
-                    if (user != null) {
+                    val currentDestination = navController.currentDestination?.id
+                    if (user != null && currentDestination != R.id.profileFragment) {
                         navController.navigate(R.id.profileFragment)
-                    } else {
+                    } else if (user == null && currentDestination != R.id.loginFragment) {
                         navController.navigate(R.id.loginFragment)
                     }
                     true
@@ -71,5 +71,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
     }
 }

@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.concesionariosbaca.R
 import com.example.concesionariosbaca.databinding.FragmentProfileBinding
 import dagger.hilt.android.AndroidEntryPoint
-import com.example.concesionariosbaca.ui.login.data.Result
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -31,30 +31,17 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        profileViewModel.loggedInUser.observe(viewLifecycleOwner) { user ->
-            if (user == null) {
+        profileViewModel.observeAuthState(viewLifecycleOwner) { isLoggedIn ->
+            if (!isLoggedIn && isAdded && findNavController().currentDestination?.id == R.id.profileFragment) {
                 findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
-            } else {
-                binding.usernameEditText.setText(user.username)
-                binding.emailEditText.setText(user.email)
             }
         }
 
-        profileViewModel.updateResult.observe(viewLifecycleOwner) { result ->
-            when (result) {
-                is Result.Success -> {
-                    Toast.makeText(context, "Perfil actualizado correctamente", Toast.LENGTH_SHORT).show()
-                }
-                is Result.Error -> {
-                    Toast.makeText(context, "Error al actualizar el perfil: ${result.exception.message}", Toast.LENGTH_SHORT).show()
-                }
+        profileViewModel.loggedInUser.observe(viewLifecycleOwner) { user ->
+            user?.let {
+                binding.usernameEditText.setText(it.username)
+                binding.emailEditText.setText(it.email)
             }
-        }
-
-        binding.saveButton.setOnClickListener {
-            val updatedUsername = binding.usernameEditText.text.toString()
-            val updatedEmail = binding.emailEditText.text.toString()
-            profileViewModel.updateUserProfile(updatedUsername, updatedEmail)
         }
 
         binding.logoutButton.setOnClickListener {

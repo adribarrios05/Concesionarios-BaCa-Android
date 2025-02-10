@@ -1,5 +1,6 @@
 package com.example.concesionariosbaca.ui.profile
 
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,35 +22,31 @@ class ProfileViewModel @Inject constructor(
     private val _loggedInUser = MutableLiveData<UserEntity?>()
     val loggedInUser: LiveData<UserEntity?> = _loggedInUser
 
-    private val _updateResult = MutableLiveData<Result<Unit>>()
-    val updateResult: LiveData<Result<Unit>> = _updateResult
+    private val _isAuthenticated = MutableLiveData<Boolean>(false)
+    val isAuthenticated: LiveData<Boolean> = _isAuthenticated
 
     init {
         viewModelScope.launch {
             val user = loginRepository.getLoggedInUser()?.toUserEntity()
             _loggedInUser.postValue(user)
+            _isAuthenticated.postValue(user != null)
+        }
+    }
+
+    fun observeAuthState(lifecycleOwner: LifecycleOwner, onAuthStateChanged: (Boolean) -> Unit) {
+        isAuthenticated.observe(lifecycleOwner) { isLoggedIn ->
+            onAuthStateChanged(isLoggedIn)
         }
     }
 
     fun updateUserProfile(username: String, email: String) {
         viewModelScope.launch {
-            try {
-                val token = loginRepository.getToken().firstOrNull()
-                if (token != null) {
-                    val result = loginRepository.updateUserProfile(token, username, email)
-                    _updateResult.postValue(result)
-                    if (result is Result.Success) {
-                        _loggedInUser.postValue(UserEntity(
-                            id = "",
-                            username = username,
-                            email = email
-                        ))
-                    }
-                } else {
-                    _updateResult.postValue(Result.Error(Exception("No hay token disponible")))
+            val token = loginRepository.getToken().firstOrNull()
+            if (token != null) {
+                val result = loginRepository.updateUserProfile(token, username, email)
+                if (result is Result.Success) {
+                    _loggedInUser.postValue(UserEntity(id = "", username, email))
                 }
-            } catch (e: Exception) {
-                _updateResult.postValue(Result.Error(e))
             }
         }
     }
@@ -58,6 +55,7 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch {
             loginRepository.logout()
             _loggedInUser.postValue(null)
+            _isAuthenticated.postValue(false)
         }
     }
 }
