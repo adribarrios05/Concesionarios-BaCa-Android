@@ -23,7 +23,7 @@ class ProfileViewModel @Inject constructor(
     val loggedInUser: LiveData<UserEntity?> = _loggedInUser
 
     private val _isAuthenticated = MutableLiveData<Boolean>(false)
-    val isAuthenticated: LiveData<Boolean> = _isAuthenticated
+    private val isAuthenticated: LiveData<Boolean> = _isAuthenticated
 
     init {
         viewModelScope.launch {

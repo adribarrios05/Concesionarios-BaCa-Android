@@ -45,7 +45,6 @@ class LoginFragment : Fragment() {
 
             if (username.isNotEmpty() && password.isNotEmpty()) {
                 loginViewModel.login(username, password)
-                binding.loading.visibility = View.VISIBLE
             } else {
                 Toast.makeText(context, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
             }
@@ -53,14 +52,10 @@ class LoginFragment : Fragment() {
 
         // Observar el resultado del login
         loginViewModel.loginResult.observe(viewLifecycleOwner) { result ->
-            binding.loading.visibility = View.GONE // Oculta el ProgressBar al recibir respuesta
             when (result) {
-                is Result.Success -> {
-                    Toast.makeText(context, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
-                }
-                is Result.Error -> {
-                    Toast.makeText(context, "Error: ${result.exception.message}", Toast.LENGTH_SHORT).show()
-                }
+                is Result.Success -> Toast.makeText(context, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
+
+                is Result.Error -> Toast.makeText(context, "Error: ${result.exception.message}", Toast.LENGTH_SHORT).show()
             }
         }
 

@@ -32,7 +32,9 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         profileViewModel.observeAuthState(viewLifecycleOwner) { isLoggedIn ->
-            if (!isLoggedIn && isAdded && findNavController().currentDestination?.id == R.id.profileFragment) {
+            val currentDestination = findNavController().currentDestination?.id
+
+            if (!isLoggedIn && isAdded && currentDestination == R.id.profileFragment) {
                 findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
             }
         }
