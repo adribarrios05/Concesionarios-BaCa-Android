@@ -1,5 +1,6 @@
 package com.example.concesionariosbaca.ui.login.ui.login
 
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,7 +22,7 @@ class LoginViewModel @Inject constructor(
     val loginResult: LiveData<Result<LoggedInUser>> = _loginResult
 
     private val _isLoggedIn = MutableLiveData<Boolean>(false)
-    val isLoggedIn: LiveData<Boolean> = _isLoggedIn
+    private val isLoggedIn: LiveData<Boolean> = _isLoggedIn
 
     init {
         viewModelScope.launch {
@@ -49,8 +50,8 @@ class LoginViewModel @Inject constructor(
     }
 
     // Función para observar cambios en el estado de autenticación
-    fun observeAuthState(onAuthStateChanged: (Boolean) -> Unit) {
-        isLoggedIn.observeForever { isLoggedIn ->
+    fun observeAuthState(lifecycleOwner: LifecycleOwner, onAuthStateChanged: (Boolean) -> Unit) {
+        isLoggedIn.observe(lifecycleOwner) { isLoggedIn ->
             onAuthStateChanged(isLoggedIn)
         }
     }
