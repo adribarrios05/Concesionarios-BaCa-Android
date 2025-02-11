@@ -18,7 +18,7 @@ class AuthViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val token = loginRepository.getToken().firstOrNull()
+            val token = loginRepository.isUserLoggedIn()
             _isAuthenticated.postValue(token != null)
         }
     }
