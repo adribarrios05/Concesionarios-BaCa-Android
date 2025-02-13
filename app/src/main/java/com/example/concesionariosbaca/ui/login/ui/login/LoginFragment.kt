@@ -1,6 +1,7 @@
 package com.example.concesionariosbaca.ui.login.ui.login
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +11,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.concesionariosbaca.R
 import com.example.concesionariosbaca.databinding.FragmentLoginBinding
+import com.example.concesionariosbaca.ui.auth.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.concesionariosbaca.ui.login.data.Result
+import com.google.android.material.button.MaterialButton
 
 
 @AndroidEntryPoint
@@ -19,6 +22,7 @@ class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
     private val loginViewModel: LoginViewModel by viewModels()
+    private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,20 +35,21 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        loginViewModel.observeAuthState(viewLifecycleOwner) { isLoggedIn ->
-            val currentDestination = findNavController().currentDestination?.id
-
-            if (isLoggedIn && isAdded && currentDestination == R.id.loginFragment) {
+        /*authViewModel.isAuthenticated.observe(viewLifecycleOwner) { isLoggedIn ->
+            if (isLoggedIn && findNavController().currentDestination?.id == R.id.loginFragment) {
                 findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
             }
-        }
+        }*/
+        val backButton: MaterialButton = view.findViewById(R.id.back_button)
+
 
         binding.login.setOnClickListener {
             val username = binding.usernameOrEmail.text.toString()
             val password = binding.password.text.toString()
 
             if (username.isNotEmpty() && password.isNotEmpty()) {
-                loginViewModel.login(username, password)
+                Log.d("logginBtn", "Datos pasados al login")
+                authViewModel.login(username, password)
             } else {
                 Toast.makeText(context, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
             }
@@ -61,6 +66,10 @@ class LoginFragment : Fragment() {
 
         binding.registerText.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+        }
+
+        backButton.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 }

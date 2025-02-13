@@ -24,21 +24,10 @@ class LoginViewModel @Inject constructor(
     private val _isLoggedIn = MutableLiveData<Boolean>(false)
     private val isLoggedIn: LiveData<Boolean> = _isLoggedIn
 
-    init {
-        viewModelScope.launch {
-            val token = loginRepository.getToken().firstOrNull()
-            _isLoggedIn.postValue(token != null)
-        }
-    }
-
     fun login(username: String, password: String) {
         viewModelScope.launch {
             val result = loginRepository.login(username, password)
             _loginResult.postValue(result)
-
-            if (result is Result.Success) {
-                _isLoggedIn.postValue(true)
-            }
         }
     }
 
@@ -46,13 +35,6 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             loginRepository.logout()
             _isLoggedIn.postValue(false)
-        }
-    }
-
-    // Función para observar cambios en el estado de autenticación
-    fun observeAuthState(lifecycleOwner: LifecycleOwner, onAuthStateChanged: (Boolean) -> Unit) {
-        isLoggedIn.observe(lifecycleOwner) { isLoggedIn ->
-            onAuthStateChanged(isLoggedIn)
         }
     }
 }

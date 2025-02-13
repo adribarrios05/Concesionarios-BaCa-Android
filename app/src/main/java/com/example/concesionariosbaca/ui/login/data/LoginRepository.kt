@@ -4,8 +4,11 @@ import com.example.concesionariosbaca.data.api.ApiService
 import com.example.concesionariosbaca.data.entities.DataStoreManager
 import com.example.concesionariosbaca.data.entities.LoginUser
 import com.example.concesionariosbaca.data.entities.UpdateProfileRequest
+import com.example.concesionariosbaca.data.entities.UserEntity
 import com.example.concesionariosbaca.data.mapping.toLoggedInUser
+import com.example.concesionariosbaca.data.mapping.toUserEntity
 import com.example.concesionariosbaca.ui.login.data.model.LoggedInUser
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -18,9 +21,12 @@ class LoginRepository @Inject constructor(
 
     private var user: LoggedInUser? = null
 
+    fun getToken(): Flow<String?> {
+        return dataStoreManager.token
+    }
+
     suspend fun isUserLoggedIn(): Boolean {
-        val token = dataStoreManager.token.firstOrNull()
-        return !token.isNullOrEmpty()
+        return getToken().firstOrNull()?.isNotEmpty() ?: false
     }
 
     suspend fun login(username: String, password: String): Result<LoggedInUser> {
@@ -47,5 +53,23 @@ class LoginRepository @Inject constructor(
     suspend fun logout() {
         dataStoreManager.clearToken()
         user = null
+    }
+
+    suspend fun getUserProfile(token: String): Result<UserEntity> {
+        return try {
+            val response = apiService.getCurrentUser("Bearer $token")
+            if(response.isSuccessful){
+                val user = response.body()?.toUserEntity() ?: throw Exception("Usuario no encontrado")
+                Result.Success(user)
+            } else{
+                Result.Error(Exception("Error al obtener el usuario: ${response.errorBody()?.string()}"))
+            }
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    suspend fun updateUserProfile(token: String, username: String, email: String): Result<UserEntity>? {
+        return null
     }
 }

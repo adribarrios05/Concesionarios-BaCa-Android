@@ -3,12 +3,14 @@ package com.example.concesionariosbaca.ui
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.concesionariosbaca.R
 import com.example.concesionariosbaca.databinding.ActivityMainBinding
+import com.example.concesionariosbaca.ui.auth.AuthViewModel
 import com.example.concesionariosbaca.ui.profile.ProfileViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var profileViewModel: ProfileViewModel
+    private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -35,32 +37,19 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationView.setupWithNavController(navController)
 
-        // Vincular ViewModel
-        profileViewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
-
-        // Observar cambios en la sesión del usuario y actualizar el título del menú
-        profileViewModel.loggedInUser.observe(this) { user ->
+        authViewModel.isAuthenticated.observe(this) { isLoggedIn ->
             val menuItem = bottomNavigationView.menu.findItem(R.id.profileFragment)
-            menuItem.title = if (user != null) "Perfil" else "Iniciar sesión"
-
-            // Si la sesión se inicia y estamos en login, navegar automáticamente a perfil
-            val currentDestination = navController.currentDestination?.id
-            if (user != null && currentDestination == R.id.loginFragment) {
-                navController.navigate(R.id.profileFragment)
-            }
-
+            menuItem.title = if (isLoggedIn) "Perfil" else "Iniciar sesión"
         }
 
         // Manejar navegación en el botón de perfil
         bottomNavigationView.setOnItemSelectedListener { item ->
-            val user = profileViewModel.loggedInUser.value
-
             when (item.itemId) {
                 R.id.profileFragment -> {
-                    val currentDestination = navController.currentDestination?.id
-                    if (user != null && currentDestination != R.id.profileFragment) {
+                    val isLoggedIn = authViewModel.isAuthenticated.value ?: false
+                    if (isLoggedIn) {
                         navController.navigate(R.id.profileFragment)
-                    } else if (user == null && currentDestination != R.id.loginFragment) {
+                    } else {
                         navController.navigate(R.id.loginFragment)
                     }
                     true
@@ -71,6 +60,5 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 }

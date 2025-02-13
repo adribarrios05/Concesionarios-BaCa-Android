@@ -30,3 +30,11 @@ fun LoggedInUser.toUserEntity(): UserEntity {
         email = this.email
     )
 }
+
+fun UserResponse.toUserEntity(): UserEntity {
+    return UserEntity(
+        id = this.id,
+        username = this.username,
+        email = this.email
+    )
+}

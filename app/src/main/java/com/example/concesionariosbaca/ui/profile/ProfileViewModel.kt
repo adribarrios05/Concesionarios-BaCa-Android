@@ -22,20 +22,19 @@ class ProfileViewModel @Inject constructor(
     private val _loggedInUser = MutableLiveData<UserEntity?>()
     val loggedInUser: LiveData<UserEntity?> = _loggedInUser
 
-    private val _isAuthenticated = MutableLiveData<Boolean>(false)
-    private val isAuthenticated: LiveData<Boolean> = _isAuthenticated
-
     init {
         viewModelScope.launch {
-            val user = loginRepository.getLoggedInUser()?.toUserEntity()
-            _loggedInUser.postValue(user)
-            _isAuthenticated.postValue(user != null)
+            val token = loginRepository.getToken().firstOrNull()
+            if(!token.isNullOrEmpty()){
+                getUserFromToken(token)
+            }
         }
     }
 
-    fun observeAuthState(lifecycleOwner: LifecycleOwner, onAuthStateChanged: (Boolean) -> Unit) {
-        isAuthenticated.observe(lifecycleOwner) { isLoggedIn ->
-            onAuthStateChanged(isLoggedIn)
+    private suspend fun getUserFromToken(token: String){
+        val userResult = loginRepository.getUserProfile(token)
+        if(userResult is Result.Success){
+            _loggedInUser.postValue(userResult.data)
         }
     }
 
@@ -55,7 +54,6 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch {
             loginRepository.logout()
             _loggedInUser.postValue(null)
-            _isAuthenticated.postValue(false)
         }
     }
 }
