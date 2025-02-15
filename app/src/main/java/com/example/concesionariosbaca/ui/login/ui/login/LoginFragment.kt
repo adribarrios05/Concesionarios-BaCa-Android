@@ -11,7 +11,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.concesionariosbaca.R
 import com.example.concesionariosbaca.databinding.FragmentLoginBinding
-import com.example.concesionariosbaca.ui.auth.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.concesionariosbaca.ui.login.data.Result
 import com.google.android.material.button.MaterialButton
@@ -22,7 +21,6 @@ class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
     private val loginViewModel: LoginViewModel by viewModels()
-    private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,23 +47,25 @@ class LoginFragment : Fragment() {
 
             if (username.isNotEmpty() && password.isNotEmpty()) {
                 Log.d("logginBtn", "Datos pasados al login")
-                authViewModel.login(username, password)
+                loginViewModel.login(username, password)
             } else {
                 Toast.makeText(context, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
             }
         }
 
-        // Observar el resultado del login
         loginViewModel.loginResult.observe(viewLifecycleOwner) { result ->
             when (result) {
-                is Result.Success -> Toast.makeText(context, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
+                is Result.Success ->{
+                    Toast.makeText(context, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
+                    Log.d("Login", "Login exitoso")
+                }
 
                 is Result.Error -> Toast.makeText(context, "Error: ${result.exception.message}", Toast.LENGTH_SHORT).show()
             }
         }
 
         binding.registerText.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+            findNavController().navigate(R.id   .action_loginFragment_to_registerFragment)
         }
 
         backButton.setOnClickListener {

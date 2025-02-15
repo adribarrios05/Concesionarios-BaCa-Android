@@ -10,7 +10,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.concesionariosbaca.R
 import com.example.concesionariosbaca.databinding.ActivityMainBinding
-import com.example.concesionariosbaca.ui.auth.AuthViewModel
 import com.example.concesionariosbaca.ui.profile.ProfileViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
