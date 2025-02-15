@@ -8,12 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.concesionariosbaca.R
 import com.example.concesionariosbaca.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.concesionariosbaca.ui.login.data.Result
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -27,19 +29,20 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            if (loginViewModel.isUserLoggedIn()) {
+                findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
+            }
+        }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        /*authViewModel.isAuthenticated.observe(viewLifecycleOwner) { isLoggedIn ->
-            if (isLoggedIn && findNavController().currentDestination?.id == R.id.loginFragment) {
-                findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
-            }
-        }*/
         val backButton: MaterialButton = view.findViewById(R.id.back_button)
-
 
         binding.login.setOnClickListener {
             val username = binding.usernameOrEmail.text.toString()
@@ -47,22 +50,32 @@ class LoginFragment : Fragment() {
 
             if (username.isNotEmpty() && password.isNotEmpty()) {
                 Log.d("logginBtn", "Datos pasados al login")
-                loginViewModel.login(username, password)
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val success = loginViewModel.login(username, password)
+                    if (success) {
+                        findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
+                    } else {
+                        Toast.makeText(context, "Error al iniciar sesión", Toast.LENGTH_SHORT).show()
+                    }
+                }
             } else {
                 Toast.makeText(context, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
             }
         }
 
-        loginViewModel.loginResult.observe(viewLifecycleOwner) { result ->
+        /*loginViewModel.loginResult.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Result.Success ->{
                     Toast.makeText(context, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        loginViewModel.saveToken(result.data.token)
+                        findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
+                    }
                     Log.d("Login", "Login exitoso")
                 }
-
-                is Result.Error -> Toast.makeText(context, "Error: ${result.exception.message}", Toast.LENGTH_SHORT).show()
+                is Result.Error -> Toast.makeText(context, "Error al iniciar sesion: ${result.exception.message}", Toast.LENGTH_SHORT).show()
             }
-        }
+        }*/
 
         binding.registerText.setOnClickListener {
             findNavController().navigate(R.id   .action_loginFragment_to_registerFragment)

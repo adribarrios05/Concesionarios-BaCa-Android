@@ -31,12 +31,6 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        /*authViewModel.isAuthenticated.observe(viewLifecycleOwner) { isLoggedIn ->
-            if (!isLoggedIn && findNavController().currentDestination?.id == R.id.profileFragment) {
-                findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
-            }
-        }*/
-
         profileViewModel.loggedInUser.observe(viewLifecycleOwner) { user ->
             user?.let {
                 binding.usernameEditText.setText(it.username)
@@ -46,6 +40,7 @@ class ProfileFragment : Fragment() {
 
         binding.logoutButton.setOnClickListener {
             profileViewModel.logout()
+            findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
         }
     }
 }

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.concesionariosbaca.data.entities.UserEntity
 import com.example.concesionariosbaca.data.mapping.toUserEntity
+import com.example.concesionariosbaca.data.repository.AuthRepository
 import com.example.concesionariosbaca.ui.login.data.LoginRepository
 import com.example.concesionariosbaca.ui.login.data.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val loginRepository: LoginRepository
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _loggedInUser = MutableLiveData<UserEntity?>()
@@ -24,36 +25,18 @@ class ProfileViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val token = loginRepository.getToken().firstOrNull()
-            if(!token.isNullOrEmpty()){
-                getUserFromToken(token)
-            }
-        }
-    }
-
-    private suspend fun getUserFromToken(token: String){
-        val userResult = loginRepository.getUserProfile(token)
-        if(userResult is Result.Success){
-            _loggedInUser.postValue(userResult.data)
-        }
-    }
-
-    fun updateUserProfile(username: String, email: String) {
-        viewModelScope.launch {
-            val token = loginRepository.getToken().firstOrNull()
-            if (token != null) {
-                val result = loginRepository.updateUserProfile(token, username, email)
-                if (result is Result.Success) {
-                    _loggedInUser.postValue(UserEntity(id = "", username, email))
-                }
+            val token = authRepository.getJwtToken().firstOrNull()
+            if (!token.isNullOrEmpty()) {
+                _loggedInUser.postValue(authRepository.getUserProfile(token))
             }
         }
     }
 
     fun logout() {
         viewModelScope.launch {
-            loginRepository.logout()
+            authRepository.logoutUser()
             _loggedInUser.postValue(null)
         }
     }
 }
+

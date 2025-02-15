@@ -1,5 +1,6 @@
 package com.example.concesionariosbaca.ui.login.data
 
+import androidx.datastore.dataStore
 import com.example.concesionariosbaca.data.api.ApiService
 import com.example.concesionariosbaca.data.entities.DataStoreManager
 import com.example.concesionariosbaca.data.entities.LoginUser
@@ -23,6 +24,10 @@ class LoginRepository @Inject constructor(
 
     fun getToken(): Flow<String?> {
         return dataStoreManager.token
+    }
+
+    suspend fun saveToken(token: String) {
+
     }
 
     suspend fun isUserLoggedIn(): Boolean {

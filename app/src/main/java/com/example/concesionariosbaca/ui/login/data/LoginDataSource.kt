@@ -26,6 +26,5 @@ class LoginDataSource(private val apiService: ApiService) {
     }
 
     fun logout() {
-        // Lógica para revocar la autenticación (limpieza local)
     }
 }
