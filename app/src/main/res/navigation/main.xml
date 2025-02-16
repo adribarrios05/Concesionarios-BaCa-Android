@@ -20,6 +20,9 @@
         <action
             android:id="@+id/action_catalogFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_catalogFragment_to_sellCarFragment2"
+            app:destination="@id/sellCarFragment2" />
     </fragment>
 
     <!-- Detalles del coche -->
@@ -72,4 +75,9 @@
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/sellCarFragment2"
+        android:name="com.example.concesionariosbaca.ui.sellCar.SellCarFragment"
+        android:label="SellCarFragment"
+        tools:layout="@layout/fragment_sell_car"/>
 </navigation>

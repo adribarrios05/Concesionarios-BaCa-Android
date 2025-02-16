@@ -11,7 +11,7 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/catalogFragment"
+        android:id="@+id/sellCarFragment2"
         android:icon="@drawable/ic_sell_your_car"
         android:title="Reventa"
         app:showAsAction="ifRoom"

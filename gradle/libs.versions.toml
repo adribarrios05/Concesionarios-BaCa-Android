@@ -1,5 +1,6 @@
 [versions]
 agp = "8.7.2"
+cameraCore = "1.4.1"
 coil = "2.7.0"
 converterGson = "2.9.0"
 coreKtxVersion = "1.13.0"
@@ -25,9 +26,15 @@ navigationCompose = "2.8.4"
 retrofit = "2.11.0"
 roomRuntime = "2.6.1"
 annotation = "1.9.1"
+legacySupportV4 = "1.0.0"
 
 [libraries]
 androidx-activity-activity-ktx3 = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCore" }
+androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "cameraCore" }
+androidx-camera-extensions = { module = "androidx.camera:camera-extensions", version.ref = "cameraCore" }
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraCore" }
+androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraCore" }
 androidx-core-ktx-v1130 = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
@@ -61,6 +68,7 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 material = { module = "com.google.android.material:material", version.ref = "material" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
+androidx-legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

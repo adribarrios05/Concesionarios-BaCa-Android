@@ -78,4 +78,17 @@ class CarRepository @Inject constructor(
             }
         }
     }
+
+    suspend fun addCar(car: CarEntity) {
+        try {
+            val response = apiService.addCar(car)
+            if(response.isSuccessful){
+                carDao.create(car)
+            } else {
+                throw Exception("Error al subir el coche")
+            }
+        } catch (e: Exception){
+            throw Exception("Error en la solicitud: ${e.message}")
+        }
+    }
 }

@@ -60,6 +60,7 @@ dependencies {
     // Room Database
     implementation (libs.androidx.room.runtime)
     implementation(libs.androidx.annotation)
+    implementation(libs.androidx.legacy.support.v4)
     kapt (libs.androidx.room.room.compiler3)
     implementation (libs.androidx.room.ktx)
 
@@ -104,6 +105,13 @@ dependencies {
 
     //DataStore
     implementation (libs.androidx.datastore.preferences)
+
+    //Camera
+    implementation (libs.androidx.camera.core)
+    implementation (libs.androidx.camera.camera2)
+    implementation (libs.androidx.camera.lifecycle)
+    implementation (libs.androidx.camera.view)
+    implementation (libs.androidx.camera.extensions)
 
 }
 

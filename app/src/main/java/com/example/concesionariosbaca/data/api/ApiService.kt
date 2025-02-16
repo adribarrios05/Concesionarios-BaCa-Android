@@ -20,6 +20,10 @@ interface ApiService {
     @GET("car/{id}")
     suspend fun getCar(@Path("id") id: String): Response<CarResponse>
 
+    // Añadir coche
+    @POST("cars")
+    suspend fun addCar(@Body car: CarEntity): Response<CarEntity>
+
     // Obtener todos los clientes
     @GET("customers")
     suspend fun getCustomers(): Response<List<CustomerEntity>>
