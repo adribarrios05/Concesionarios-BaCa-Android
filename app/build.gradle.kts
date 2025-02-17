@@ -113,6 +113,7 @@ dependencies {
     implementation (libs.androidx.camera.view)
     implementation (libs.androidx.camera.extensions)
 
+
 }
 
 kapt{

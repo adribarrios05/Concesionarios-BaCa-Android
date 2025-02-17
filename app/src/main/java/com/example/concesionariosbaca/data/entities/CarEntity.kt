@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "car")
 data class CarEntity(
-    @PrimaryKey val id: String,
+    @PrimaryKey var id: String,
     val brand: String,
     val model: String,
     val horsePower: Int,

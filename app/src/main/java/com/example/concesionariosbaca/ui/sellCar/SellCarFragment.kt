@@ -1,10 +1,10 @@
 package com.example.concesionariosbaca.ui.sellCar
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.fragment.app.viewModels
 import android.os.Bundle
-import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,17 +12,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
-import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
-import com.example.concesionariosbaca.R
 import com.example.concesionariosbaca.data.entities.CarEntity
-import com.example.concesionariosbaca.databinding.FragmentProfileBinding
 import com.example.concesionariosbaca.databinding.FragmentSellCarBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.File
+import android.Manifest
+import java.util.UUID
 
 @AndroidEntryPoint
 class SellCarFragment : Fragment() {
@@ -47,6 +47,22 @@ class SellCarFragment : Fragment() {
         }
     }
 
+    private val cameraPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            openCamera()
+        } else {
+            Toast.makeText(requireContext(), "Permiso de cámara denegado", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+        } else {
+            openCamera()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -66,10 +82,9 @@ class SellCarFragment : Fragment() {
         cameraController = LifecycleCameraController(requireContext())
         cameraController.bindToLifecycle(viewLifecycleOwner)
         cameraController.cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-        binding.cameraPreviewView.controller = cameraController
 
         binding.uploadFromGalleryButton.setOnClickListener { openGallery() }
-        binding.openCameraButton.setOnClickListener { openCamera() }
+        binding.openCameraButton.setOnClickListener { checkCameraPermission() }
         binding.submitButton.setOnClickListener { submitCar() }
 
         sellCarViewModel.photo.observe(viewLifecycleOwner) { uri ->
@@ -90,22 +105,25 @@ class SellCarFragment : Fragment() {
     }
 
     private fun submitCar() {
-        val car = CarEntity(
-            id = "",
-            brand = binding.brandEditText.text.toString(),
-            model = binding.modelEditText.text.toString(),
-            horsePower = binding.horsePowerEditText.text.toString().toInt(),
-            description = binding.descriptionEditText.text.toString(),
-            color = binding.colorEditText.text.toString(),
-            type = binding.typeEditText.text.toString(),
-            price = binding.priceEditText.text.toString().toDouble(),
-            plate = binding.plateEditText.text.toString(),
-            pictureUrl = imageUri?.toString(),
-            doors = binding.doorsEditText.text.toString().toInt(),
-            customerId = null
-        )
-
         lifecycleScope.launch {
+            val imageUrl = sellCarViewModel.uploadImage(requireContext())
+
+            val tempId = UUID.randomUUID().toString()
+            val car = CarEntity(
+                id = tempId,
+                brand = binding.brandEditText.text.toString(),
+                model = binding.modelEditText.text.toString(),
+                horsePower = binding.horsePowerEditText.text.toString().toInt(),
+                description = binding.descriptionEditText.text.toString(),
+                color = binding.colorEditText.text.toString(),
+                type = binding.typeEditText.text.toString(),
+                price = binding.priceEditText.text.toString().toDouble(),
+                plate = binding.plateEditText.text.toString(),
+                pictureUrl = imageUrl,
+                doors = binding.doorsEditText.text.toString().toInt(),
+                customerId = null
+            )
+
             sellCarViewModel.uploadCar(car)
             Toast.makeText(requireContext(), "Coche subido con éxito", Toast.LENGTH_SHORT).show()
         }

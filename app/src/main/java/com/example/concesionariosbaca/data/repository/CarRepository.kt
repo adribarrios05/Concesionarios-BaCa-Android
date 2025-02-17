@@ -4,11 +4,10 @@ import android.util.Log
 import com.example.concesionariosbaca.data.api.ApiService
 import com.example.concesionariosbaca.data.database.CarDao
 import com.example.concesionariosbaca.data.entities.CarEntity
-import com.example.concesionariosbaca.data.mapping.CarData
+import com.example.concesionariosbaca.data.mapping.CarRequest
 import com.example.concesionariosbaca.data.mapping.toCarEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.Response
 import javax.inject.Inject
 
 class CarRepository @Inject constructor(
@@ -81,14 +80,31 @@ class CarRepository @Inject constructor(
 
     suspend fun addCar(car: CarEntity) {
         try {
-            val response = apiService.addCar(car)
-            if(response.isSuccessful){
-                carDao.create(car)
+            Log.d("addCar car", "Este es el coche que se enviará a Strapi: ${CarRequest(car)}")
+
+            val carWithoutId = car.copy(id = "")
+            val response = apiService.addCar(CarRequest(carWithoutId))
+
+            if (response.isSuccessful) {
+                val createdCar = response.body()?.data?.firstOrNull()
+                if (createdCar != null) {
+                    Log.d("addCar success", "Coche subido correctamente con ID: ${createdCar.id}")
+
+                    // Guardar en Room con el ID generado por Strapi
+                    val carWithId = car.copy(id = createdCar.id.toString())
+                    carDao.create(carWithId)
+                } else {
+                    throw Exception("Error: Strapi no devolvió un ID válido")
+                }
             } else {
-                throw Exception("Error al subir el coche")
+                val errorBody = response.errorBody()?.string()
+                Log.e("addCar error", "Error al subir el coche. Código: ${response.code()}, Respuesta: $errorBody")
+                throw Exception("Error al subir el coche. Código: ${response.code()}, Respuesta: $errorBody")
             }
-        } catch (e: Exception){
+        } catch (e: Exception) {
+            Log.e("addCar exception", "Error en la solicitud: ${e.message}")
             throw Exception("Error en la solicitud: ${e.message}")
         }
     }
+
 }

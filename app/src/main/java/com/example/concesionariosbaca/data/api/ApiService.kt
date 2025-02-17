@@ -1,8 +1,10 @@
 package com.example.concesionariosbaca.data.api
 
 import com.example.concesionariosbaca.data.entities.*
+import com.example.concesionariosbaca.data.mapping.CarRequest
 import com.example.concesionariosbaca.data.mapping.CarResponse
 import com.example.concesionariosbaca.data.repository.RegisterCustomerRequest
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -22,7 +24,7 @@ interface ApiService {
 
     // Añadir coche
     @POST("cars")
-    suspend fun addCar(@Body car: CarEntity): Response<CarEntity>
+    suspend fun addCar(@Body request: CarRequest): Response<CarResponse>
 
     // Obtener todos los clientes
     @GET("customers")
@@ -61,6 +63,12 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body updateRequest: UpdateProfileRequest
     ): Response<Unit>
+
+    @Multipart
+    @POST("upload")
+    suspend fun uploadImage(
+        @Part file: MultipartBody.Part
+    ): Response<List<StrapiUploadResponse>>
 }
 
 
@@ -69,8 +77,13 @@ class ConcesionarioService @Inject constructor() {
     private val apiUrl = "https://concesionarios-baca-service.onrender.com/api/"
     private val apiLocalUrl = "http://192.168.1.127:1337/api/"
     val apiService: ApiService = Retrofit.Builder()
-        .baseUrl(apiLocalUrl)
+        .baseUrl(apiUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(ApiService::class.java)
 }
+
+data class StrapiUploadResponse(
+    val id: Int,
+    val url: String
+)

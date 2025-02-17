@@ -7,6 +7,12 @@ data class CarResponse(
     val meta: Meta
 )
 
+data class CarRequest(
+    val data: CarEntity
+)
+
+
+
 data class CarData(
     val id: Int,
     val attributes: CarAttributes
