@@ -6,6 +6,7 @@ import com.example.concesionariosbaca.data.database.CarDao
 import com.example.concesionariosbaca.data.entities.CarEntity
 import com.example.concesionariosbaca.data.mapping.CarRequest
 import com.example.concesionariosbaca.data.mapping.toCarEntity
+import com.example.concesionariosbaca.data.mapping.toCarRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -22,10 +23,7 @@ class CarRepository @Inject constructor(
             Log.d("CarRepository", "API Response: ${response.body()}")
 
             if (response.isSuccessful) {
-                val cars = response.body()?.data?.map { it.toCarEntity() } ?: emptyList()
-                carDao.createAll(cars) // Guarda los coches en la base de datos local
-                Log.d("CarRepository", "Cars fetched from API: $cars")
-                return cars
+                response.body()?.cars?.map { it.toCarEntity() } ?: emptyList()
             } else {
                 Log.e("CarRepository", "Error fetching cars from API: ${response.errorBody()}")
                 return carDao.readAll() // Devuelve datos locales en caso de error
@@ -42,14 +40,7 @@ class CarRepository @Inject constructor(
         return try {
             val response = apiService.getCar(carId)
             if (response.isSuccessful) {
-                val car = response.body()?.data?.first()?.toCarEntity()
-                if (car != null) {
-                    Log.d("CarRepository", "Car fetched from API: $car")
-                    car
-                } else {
-                    Log.e("CarRepository", "Car not found in API for ID: $carId")
-                    carDao.readOne(carId)
-                }
+                response.body()?.data?.toCarEntity() ?: carDao.readOne(carId)
             } else {
                 Log.e("CarRepository", "Error fetching car from API: ${response.errorBody()}")
                 carDao.readOne(carId)
@@ -66,9 +57,10 @@ class CarRepository @Inject constructor(
             try {
                 val response = apiService.getCars()
                 if (response.isSuccessful) {
-                    val cars = response.body()?.data?.map { it.toCarEntity() } ?: emptyList()
-                    carDao.createAll(cars) // Guarda los datos localmente
-                    Log.d("CarRepository", "Local DB updated with cars from API")
+                    response.body()?.cars?.map{ it.toCarEntity() }?.let {
+                        carDao.createAll(it)
+                        Log.d("CarRepository", "BBDD local cargada con datos de la API")
+                    }
                 } else {
                     Log.e("CarRepository", "Error fetching cars for local DB: ${response.errorBody()}")
                 }
@@ -80,22 +72,15 @@ class CarRepository @Inject constructor(
 
     suspend fun addCar(car: CarEntity) {
         try {
-            Log.d("addCar car", "Este es el coche que se enviará a Strapi: ${CarRequest(car)}")
+            Log.d("addCar car", "Este es el coche que se enviará a Strapi: ${car.toCarRequest()}")
 
-            val carWithoutId = car.copy(id = "")
-            val response = apiService.addCar(CarRequest(carWithoutId))
+            val response = apiService.addCar(car.toCarRequest())
 
             if (response.isSuccessful) {
-                val createdCar = response.body()?.data?.firstOrNull()
-                if (createdCar != null) {
+                response.body()?.data?.toCarEntity()?.let { createdCar ->
                     Log.d("addCar success", "Coche subido correctamente con ID: ${createdCar.id}")
-
-                    // Guardar en Room con el ID generado por Strapi
-                    val carWithId = car.copy(id = createdCar.id.toString())
-                    carDao.create(carWithId)
-                } else {
-                    throw Exception("Error: Strapi no devolvió un ID válido")
-                }
+                    carDao.create(createdCar)
+                } ?: throw Exception("Error: Strapi no devolvió un ID válido")
             } else {
                 val errorBody = response.errorBody()?.string()
                 Log.e("addCar error", "Error al subir el coche. Código: ${response.code()}, Respuesta: $errorBody")

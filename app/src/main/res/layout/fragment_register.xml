@@ -136,6 +136,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:backgroundTint="@color/dark_red"
+            android:textColor="@android:color/white"
             android:text="Registrar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

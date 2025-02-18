@@ -44,7 +44,7 @@ class CarDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val menuButton: MaterialButton = view.findViewById(R.id.menu_button)
-        //val popupMenu = PopupMenu(requireContext(), menuButton)
+        val popupMenu = PopupMenu(requireContext(), menuButton)
         val backButton: MaterialButton = view.findViewById(R.id.back_button)
         val carId = CarDetailsFragmentArgs.fromBundle(requireArguments()).carId
         carDetailsViewModel.getCarDetails(carId)
@@ -64,34 +64,19 @@ class CarDetailsFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        /*menuButton.setOnClickListener {
+        menuButton.setOnClickListener {
             popupMenu.show()
         }
 
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.item1 -> {
-
-                    true
-                }
-                R.id.item2 -> {
-                    findNavController().navigate(R.id.catalogFragment)
-                    true
-                }
-                R.id.item3 -> { // Perfil
-                    lifecycleScope.launch {
-                        val isLoggedIn = profileViewModel.isUserLoggedIn()
-                        if (isLoggedIn) {
-                            findNavController().navigate(R.id.action_catalogFragment_to_profileFragment)
-                        } else {
-                            findNavController().navigate(R.id.action_catalogFragment_to_loginFragment)
-                        }
-                    }
+                    //TODO() Implementar mapa
                     true
                 }
                 else -> false
             }
-        }*/
+        }
     }
 
     @SuppressLint("SetTextI18n")

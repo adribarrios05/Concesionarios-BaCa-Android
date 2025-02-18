@@ -22,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.File
 import android.Manifest
+import android.util.Log
 import java.util.UUID
 
 @AndroidEntryPoint
@@ -106,26 +107,31 @@ class SellCarFragment : Fragment() {
 
     private fun submitCar() {
         lifecycleScope.launch {
-            val imageUrl = sellCarViewModel.uploadImage(requireContext())
+            try{
+                val imageUrl = sellCarViewModel.uploadImage(requireContext())
 
-            val tempId = UUID.randomUUID().toString()
-            val car = CarEntity(
-                id = tempId,
-                brand = binding.brandEditText.text.toString(),
-                model = binding.modelEditText.text.toString(),
-                horsePower = binding.horsePowerEditText.text.toString().toInt(),
-                description = binding.descriptionEditText.text.toString(),
-                color = binding.colorEditText.text.toString(),
-                type = binding.typeEditText.text.toString(),
-                price = binding.priceEditText.text.toString().toDouble(),
-                plate = binding.plateEditText.text.toString(),
-                pictureUrl = imageUrl,
-                doors = binding.doorsEditText.text.toString().toInt(),
-                customerId = null
-            )
+                val tempId = UUID.randomUUID().toString()
+                val car = CarEntity(
+                    id = tempId,
+                    brand = binding.brandEditText.text.toString(),
+                    model = binding.modelEditText.text.toString(),
+                    horsePower = binding.horsePowerEditText.text.toString().toInt(),
+                    description = binding.descriptionEditText.text.toString(),
+                    color = binding.colorEditText.text.toString(),
+                    type = binding.typeEditText.text.toString(),
+                    price = binding.priceEditText.text.toString().toDouble(),
+                    plate = binding.plateEditText.text.toString(),
+                    pictureUrl = imageUrl,
+                    doors = binding.doorsEditText.text.toString().toInt(),
+                    customerId = null
+                )
 
-            sellCarViewModel.uploadCar(car)
-            Toast.makeText(requireContext(), "Coche subido con éxito", Toast.LENGTH_SHORT).show()
+                sellCarViewModel.uploadCar(car)
+                Toast.makeText(requireContext(), "Coche subido con éxito", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception){
+                Log.e("submitCar: ", "Error al subir el coche: $e")
+                Toast.makeText(requireContext(), "No se pudo subir el coche. Inténtelo de nuevo.", Toast.LENGTH_LONG).show()
+            }
         }
     }
 }

@@ -71,15 +71,18 @@ class AuthRepository @Inject constructor(
 
         return if (response.isSuccessful && response.body() != null) {
             val token = response.body()!!.jwt
+            //Log.d("LogIn", "Login exitoso")
             dataStoreManager.saveToken(token)
             true
         } else {
+            //Log.e("LogIn", "Error el el login")
             false
         }
     }
 
     suspend fun logoutUser() {
         clearJwtToken()
+        Log.d("Logout", "Sesión cerrada correctamente")
     }
 
     suspend fun isUserLoggedIn(): Boolean {

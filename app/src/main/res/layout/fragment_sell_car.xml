@@ -1,155 +1,171 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="wrap_content">
 
-    <!-- Imagen del coche -->
-    <ImageView
-        android:id="@+id/carImageView"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginBottom="16dp"
-        android:contentDescription="Imagen del coche"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:scaleType="centerCrop"
-        android:background="@android:color/darker_gray" />
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-    <!-- Botón para abrir la cámara -->
-    <Button
-        android:id="@+id/openCameraButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tomar Foto"
-        app:layout_constraintTop_toBottomOf="@id/carImageView"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="8dp" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginTop="110dp"
+            android:layout_marginBottom="90dp"
+            >
 
-    <!-- Botón para seleccionar imagen de la galería -->
-    <Button
-        android:id="@+id/uploadFromGalleryButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Seleccionar desde Galería"
-        app:layout_constraintTop_toBottomOf="@id/carImageView"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+            <!-- Imagen del coche -->
+            <ImageView
+                android:id="@+id/carImageView"
+                android:layout_width="320dp"
+                android:layout_height="180dp"
+                android:layout_marginBottom="16dp"
+                android:contentDescription="Imagen del coche"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:scaleType="centerCrop"
+                android:background="@drawable/ic_add_photo" />
 
-    <!--<androidx.camera.view.PreviewView
-        android:id="@+id/cameraPreviewView"
-        android:layout_width="0dp"
-        android:layout_height="250dp"
-        app:layout_constraintTop_toBottomOf="@id/uploadFromGalleryButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@android:color/darker_gray"/>-->
+            <!-- Botón para abrir la cámara -->
+            <Button
+                android:id="@+id/openCameraButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tomar Foto"
+                app:layout_constraintTop_toBottomOf="@id/carImageView"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/dark_red"
+                android:textColor="@android:color/white"/>
 
-    <!-- Campos de entrada de datos -->
-    <EditText
-        android:id="@+id/brandEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Marca"
-        app:layout_constraintTop_toBottomOf="@id/uploadFromGalleryButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+            <!-- Botón para seleccionar imagen de la galería -->
+            <Button
+                android:id="@+id/uploadFromGalleryButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Seleccionar desde Galería"
+                app:layout_constraintTop_toBottomOf="@id/carImageView"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/dark_red"
+                android:textColor="@android:color/white"/>
 
-    <EditText
-        android:id="@+id/modelEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Modelo"
-        app:layout_constraintTop_toBottomOf="@id/brandEditText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+            <!-- Campos de entrada de datos -->
+            <EditText
+                android:id="@+id/brandEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Marca"
+                app:layout_constraintTop_toBottomOf="@id/uploadFromGalleryButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="16dp" />
 
-    <EditText
-        android:id="@+id/horsePowerEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Caballos de fuerza"
-        android:inputType="number"
-        app:layout_constraintTop_toBottomOf="@id/modelEditText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+            <EditText
+                android:id="@+id/modelEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Modelo"
+                app:layout_constraintTop_toBottomOf="@id/brandEditText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp" />
 
-    <EditText
-        android:id="@+id/descriptionEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Descripción"
-        android:inputType="textMultiLine"
-        app:layout_constraintTop_toBottomOf="@id/horsePowerEditText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+            <EditText
+                android:id="@+id/horsePowerEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Caballos de fuerza"
+                android:inputType="number"
+                app:layout_constraintTop_toBottomOf="@id/modelEditText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp" />
 
-    <EditText
-        android:id="@+id/colorEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Color"
-        app:layout_constraintTop_toBottomOf="@id/descriptionEditText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+            <EditText
+                android:id="@+id/descriptionEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Descripción"
+                android:inputType="textMultiLine"
+                app:layout_constraintTop_toBottomOf="@id/horsePowerEditText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp" />
 
-    <EditText
-        android:id="@+id/typeEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Tipo"
-        app:layout_constraintTop_toBottomOf="@id/colorEditText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+            <EditText
+                android:id="@+id/colorEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Color"
+                app:layout_constraintTop_toBottomOf="@id/descriptionEditText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp" />
 
-    <EditText
-        android:id="@+id/priceEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Precio"
-        android:inputType="numberDecimal"
-        app:layout_constraintTop_toBottomOf="@id/typeEditText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+            <EditText
+                android:id="@+id/typeEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tipo"
+                app:layout_constraintTop_toBottomOf="@id/colorEditText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp" />
 
-    <EditText
-        android:id="@+id/plateEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Placa"
-        app:layout_constraintTop_toBottomOf="@id/priceEditText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+            <EditText
+                android:id="@+id/priceEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Precio"
+                android:inputType="numberDecimal"
+                app:layout_constraintTop_toBottomOf="@id/typeEditText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp" />
 
-    <EditText
-        android:id="@+id/doorsEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Número de puertas"
-        android:inputType="number"
-        app:layout_constraintTop_toBottomOf="@id/plateEditText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+            <EditText
+                android:id="@+id/plateEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Placa"
+                app:layout_constraintTop_toBottomOf="@id/priceEditText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp" />
 
-    <!-- Botón para enviar -->
-    <Button
-        android:id="@+id/submitButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Vender Coche"
-        app:layout_constraintTop_toBottomOf="@id/doorsEditText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+            <EditText
+                android:id="@+id/doorsEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Número de puertas"
+                android:inputType="number"
+                app:layout_constraintTop_toBottomOf="@id/plateEditText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp" />
+
+            <!-- Botón para enviar -->
+            <Button
+                android:id="@+id/submitButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Vender Coche"
+                app:layout_constraintTop_toBottomOf="@id/doorsEditText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="16dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <include
+        android:id="@+id/navbar"
+        layout="@layout/navbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.example.concesionariosbaca.data.api
 
 import com.example.concesionariosbaca.data.entities.*
+import com.example.concesionariosbaca.data.mapping.CarListResponse
 import com.example.concesionariosbaca.data.mapping.CarRequest
 import com.example.concesionariosbaca.data.mapping.CarResponse
 import com.example.concesionariosbaca.data.repository.RegisterCustomerRequest
@@ -16,7 +17,7 @@ interface ApiService {
 
     // Obtener todos los coches con imágenes relacionadas
     @GET("cars?populate=picture")
-    suspend fun getCars(): Response<CarResponse>
+    suspend fun getCars(): Response<CarListResponse>
 
     // Obtener detalles de un coche por ID
     @GET("car/{id}")

@@ -48,10 +48,10 @@ class CatalogFragment : Fragment() {
         }
         val recyclerView = binding.catalogList
         val emptyState = binding.emptyState
-        //val menuButton: MaterialButton = view.findViewById(R.id.menu_button)
-        //val popupMenu = PopupMenu(requireContext(), menuButton)
+        val menuButton: MaterialButton = view.findViewById(R.id.menu_button)
+        val popupMenu = PopupMenu(requireContext(), menuButton)
         val backButton: MaterialButton = view.findViewById(R.id.back_button)
-        //popupMenu.menuInflater.inflate(R.menu.main_menu, popupMenu.menu)
+        popupMenu.menuInflater.inflate(R.menu.main_menu, popupMenu.menu)
 
         recyclerView.apply {
             adapter = carAdapter
@@ -77,34 +77,19 @@ class CatalogFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        /*menuButton.setOnClickListener {
+        menuButton.setOnClickListener {
             popupMenu.show()
-        }*/
+        }
 
-        /*popupMenu.setOnMenuItemClickListener { item ->
+        popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.item1 -> {
-
-                    true
-                }
-                R.id.item2 -> {
-                    findNavController().navigate(R.id.catalogFragment)
-                    true
-                }
-                R.id.item3 -> { // Perfil
-                    lifecycleScope.launch {
-                        val isLoggedIn = profileViewModel.isUserLoggedIn()
-                        if (isLoggedIn) {
-                           findNavController().navigate(R.id.action_catalogFragment_to_profileFragment)
-                        } else {
-                            findNavController().navigate(R.id.action_catalogFragment_to_loginFragment)
-                        }
-                    }
+                    //TODO() Implementar mapa
                     true
                 }
                 else -> false
             }
-        }*/
+        }
 
     }
 

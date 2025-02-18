@@ -69,6 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:backgroundTint="@color/dark_red"
+            android:textColor="@android:color/white"
             android:focusable="true"
             android:text="Iniciar Sesión"
             app:layout_constraintEnd_toEndOf="parent"

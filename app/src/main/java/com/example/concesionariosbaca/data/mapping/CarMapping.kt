@@ -1,17 +1,24 @@
 package com.example.concesionariosbaca.data.mapping
 
 import com.example.concesionariosbaca.data.entities.CarEntity
+import com.google.gson.*
+import com.google.gson.annotations.SerializedName
+import com.google.gson.reflect.TypeToken
+import kotlinx.serialization.Serializer
+import java.lang.reflect.Type
 
 data class CarResponse(
-    val data: List<CarData>,
+    val data: CarData,
     val meta: Meta
 )
 
-data class CarRequest(
-    val data: CarEntity
+data class CarListResponse(
+     @SerializedName("data") val cars: List<CarData>
 )
 
-
+data class CarRequest(
+    val data: CarAttributes
+)
 
 data class CarData(
     val id: Int,
@@ -30,9 +37,7 @@ data class CarAttributes(
     val picture: PictureData?,
     val doors: Int,
     val customerId: Int?,
-    val createdAt: String?,
-    val updatedAt: String?,
-    val publishedAt: String?
+
 ) {
     val pictureUrl: String?
         get() = mapPictureToUrl(picture)
@@ -88,6 +93,24 @@ fun CarData.toCarEntity(): CarEntity {
         doors = this.attributes.doors,
         pictureUrl = this.attributes.pictureUrl,
         customerId = this.attributes.customerId
+    )
+}
+
+fun CarEntity.toCarRequest(): CarRequest {
+    return CarRequest(
+        data = CarAttributes(
+            brand = this.brand,
+            model = this.model,
+            horsePower = this.horsePower,
+            description = this.description,
+            price = this.price,
+            color = this.color,
+            type = this.type,
+            plate = this.plate,
+            doors = this.doors,
+            picture = pictureUrl?.let { PictureData(PictureAttributes(0, PictureFormats(it, null, null, null))) },
+            customerId = this.customerId,
+        )
     )
 }
 
