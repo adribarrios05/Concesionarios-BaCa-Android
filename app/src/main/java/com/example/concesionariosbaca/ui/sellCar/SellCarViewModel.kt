@@ -32,8 +32,12 @@ class SellCarViewModel @Inject constructor(
         _photo.value = uri
     }
 
-    suspend fun uploadCar(car: CarEntity) {
-        repository.addCar(car)
+    suspend fun uploadCar(car: CarEntity, imageFile: File?) {
+        try {
+            repository.addCar(car, imageFile)
+        } catch (e: Exception) {
+            throw Exception("Error al subir el coche: ${e.message}")
+        }
     }
 
     suspend fun uploadImage(context: Context): String? {
@@ -54,6 +58,19 @@ class SellCarViewModel @Inject constructor(
     private fun convertUriToFile(context: Context, uri: Uri): File? {
         val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
         val file = File(context.cacheDir, "uploaded_image.jpg")
+        val outputStream = FileOutputStream(file)
+
+        inputStream?.copyTo(outputStream)
+        inputStream?.close()
+        outputStream.close()
+
+        return file
+    }
+
+    fun getImageFile(context: Context): File? {
+        val imageUri = _photo.value ?: return null
+        val inputStream: InputStream? = context.contentResolver.openInputStream(imageUri)
+        val file = File(context.cacheDir, "uploaded_car_image.jpg")
         val outputStream = FileOutputStream(file)
 
         inputStream?.copyTo(outputStream)

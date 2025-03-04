@@ -34,6 +34,11 @@
         <argument
             android:name="carId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_carDetailsFragment_to_catalogFragment"
+            app:destination="@id/catalogFragment"
+            app:popUpTo="@id/main_nav_graph"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <!-- Perfil -->
@@ -75,9 +80,16 @@
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/sellCarFragment2"
         android:name="com.example.concesionariosbaca.ui.sellCar.SellCarFragment"
         android:label="SellCarFragment"
         tools:layout="@layout/fragment_sell_car"/>
+
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.concesionariosbaca.ui.maps.MapsFragment"
+        android:label="Mapa"
+        tools:layout="@layout/fragment_maps" />
 </navigation>

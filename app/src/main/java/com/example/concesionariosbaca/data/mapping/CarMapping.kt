@@ -36,7 +36,7 @@ data class CarAttributes(
     val plate: String,
     val picture: PictureData?,
     val doors: Int,
-    val customerId: Int?,
+    val customer: Int?,
 
 ) {
     val pictureUrl: String?
@@ -92,7 +92,7 @@ fun CarData.toCarEntity(): CarEntity {
         plate = this.attributes.plate,
         doors = this.attributes.doors,
         pictureUrl = this.attributes.pictureUrl,
-        customerId = this.attributes.customerId
+        customerId = this.attributes.customer
     )
 }
 
@@ -109,7 +109,7 @@ fun CarEntity.toCarRequest(): CarRequest {
             plate = this.plate,
             doors = this.doors,
             picture = pictureUrl?.let { PictureData(PictureAttributes(0, PictureFormats(it, null, null, null))) },
-            customerId = this.customerId,
+            customer = this.customerId,
         )
     )
 }

@@ -113,6 +113,10 @@ dependencies {
     implementation (libs.androidx.camera.view)
     implementation (libs.androidx.camera.extensions)
 
+    //Google maps
+        implementation(libs.play.services.maps)
+        implementation(libs.play.services.location)
+
 
 }
 

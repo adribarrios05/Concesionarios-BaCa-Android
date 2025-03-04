@@ -50,12 +50,9 @@ class RegisterViewModel @Inject constructor(
                         )
                         Log.d("RegisterViewModel", "Response from registerCustomer: ${customerResponse.body()?.toString()}")
 
-                        if (customerResponse != null) {
+                        run {
                             Log.d("RegisterViewModel", "Cliente registrado exitosamente: ${customerResponse.body()?.toString()}")
                             Result.success(Unit)
-                        } else {
-                            Log.e("Register Error", "Error al registrar el cliente: ${customerResponse.body()?.toString()}")
-                            Result.failure(Exception("Error: la respuesta del servidor al registrar el cliente es nula"))
                         }
                     } else {
                         Log.e("Register Error", "Error code: ${userResponse.code()}, Body: ${userResponse.errorBody()?.string()}")

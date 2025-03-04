@@ -108,11 +108,10 @@ class SellCarFragment : Fragment() {
     private fun submitCar() {
         lifecycleScope.launch {
             try{
-                val imageUrl = sellCarViewModel.uploadImage(requireContext())
+                val imageFile = sellCarViewModel.getImageFile(requireContext())
 
-                val tempId = UUID.randomUUID().toString()
                 val car = CarEntity(
-                    id = tempId,
+                    id = UUID.randomUUID().toString(),
                     brand = binding.brandEditText.text.toString(),
                     model = binding.modelEditText.text.toString(),
                     horsePower = binding.horsePowerEditText.text.toString().toInt(),
@@ -121,12 +120,12 @@ class SellCarFragment : Fragment() {
                     type = binding.typeEditText.text.toString(),
                     price = binding.priceEditText.text.toString().toDouble(),
                     plate = binding.plateEditText.text.toString(),
-                    pictureUrl = imageUrl,
+                    pictureUrl = null,
                     doors = binding.doorsEditText.text.toString().toInt(),
                     customerId = null
                 )
 
-                sellCarViewModel.uploadCar(car)
+                sellCarViewModel.uploadCar(car, imageFile)
                 Toast.makeText(requireContext(), "Coche subido con éxito", Toast.LENGTH_SHORT).show()
             } catch (e: Exception){
                 Log.e("submitCar: ", "Error al subir el coche: $e")

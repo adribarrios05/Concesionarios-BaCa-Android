@@ -4,6 +4,7 @@ import com.example.concesionariosbaca.data.entities.LoginResponse
 import com.example.concesionariosbaca.data.entities.UserEntity
 import com.example.concesionariosbaca.data.entities.UserResponse
 import com.example.concesionariosbaca.ui.login.data.model.LoggedInUser
+import com.google.gson.annotations.SerializedName
 
 fun LoginResponse.toLoggedInUser(): LoggedInUser {
     return LoggedInUser(
@@ -38,3 +39,20 @@ fun UserResponse.toUserEntity(): UserEntity {
         email = this.email
     )
 }
+
+data class CustomerResponse(
+    @SerializedName("data") val data: List<CustomerData>
+)
+
+data class CustomerData(
+    @SerializedName("id") val id: Int,
+    @SerializedName("attributes") val attributes: CustomerAttributes
+)
+
+data class CustomerAttributes(
+    @SerializedName("user") val user: UserData
+)
+
+data class UserData(
+    @SerializedName("id") val id: Int
+)

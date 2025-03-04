@@ -84,7 +84,7 @@ class CatalogFragment : Fragment() {
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.item1 -> {
-                    //TODO() Implementar mapa
+                    findNavController().navigate(R.id.mapsFragment)
                     true
                 }
                 else -> false

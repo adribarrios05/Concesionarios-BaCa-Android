@@ -4,11 +4,21 @@ import android.util.Log
 import com.example.concesionariosbaca.data.api.ApiService
 import com.example.concesionariosbaca.data.database.CarDao
 import com.example.concesionariosbaca.data.entities.CarEntity
+import com.example.concesionariosbaca.data.mapping.CarAttributes
 import com.example.concesionariosbaca.data.mapping.CarRequest
+import com.example.concesionariosbaca.data.mapping.PictureAttributes
+import com.example.concesionariosbaca.data.mapping.PictureData
+import com.example.concesionariosbaca.data.mapping.PictureFormats
 import com.example.concesionariosbaca.data.mapping.toCarEntity
 import com.example.concesionariosbaca.data.mapping.toCarRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
+import java.io.File
 import javax.inject.Inject
 
 class CarRepository @Inject constructor(
@@ -23,7 +33,10 @@ class CarRepository @Inject constructor(
             Log.d("CarRepository", "API Response: ${response.body()}")
 
             if (response.isSuccessful) {
-                response.body()?.cars?.map { it.toCarEntity() } ?: emptyList()
+                response.body()?.cars?.map { it.toCarEntity() }?.filter {
+                    Log.d("CarRepository", "Filtrando coche: ${it.id}, CustomerID: ${it.customerId}")
+                    it.customerId == null
+                } ?: emptyList()
             } else {
                 Log.e("CarRepository", "Error fetching cars from API: ${response.errorBody()}")
                 return carDao.readAll() // Devuelve datos locales en caso de error
@@ -70,26 +83,83 @@ class CarRepository @Inject constructor(
         }
     }
 
-    suspend fun addCar(car: CarEntity) {
+    suspend fun addCar(car: CarEntity, imageFile: File?) {
         try {
-            Log.d("addCar car", "Este es el coche que se enviará a Strapi: ${car.toCarRequest()}")
+            val carJson = JSONObject().apply {
+                put("brand", car.brand)
+                put("model", car.model)
+                put("horsePower", car.horsePower)
+                put("description", car.description)
+                put("color", car.color)
+                put("type", car.type)
+                put("price", car.price)
+                put("plate", car.plate)
+                put("doors", car.doors)
+                put("customerId", car.customerId ?: JSONObject.NULL)
+            }.toString()
 
-            val response = apiService.addCar(car.toCarRequest())
+            val carData = carJson.toRequestBody("application/json".toMediaTypeOrNull())
+
+            val imagePart = imageFile?.let {
+                val requestFile = RequestBody.create("image/jpeg".toMediaTypeOrNull(), it)
+                MultipartBody.Part.createFormData("files.picture", it.name, requestFile)
+            }
+
+            val response = apiService.addCar(carData, imagePart)
 
             if (response.isSuccessful) {
-                response.body()?.data?.toCarEntity()?.let { createdCar ->
+                val createdCar = response.body()?.data?.toCarEntity()
+                if (createdCar != null) {
                     Log.d("addCar success", "Coche subido correctamente con ID: ${createdCar.id}")
                     carDao.create(createdCar)
-                } ?: throw Exception("Error: Strapi no devolvió un ID válido")
+                }
             } else {
-                val errorBody = response.errorBody()?.string()
-                Log.e("addCar error", "Error al subir el coche. Código: ${response.code()}, Respuesta: $errorBody")
-                throw Exception("Error al subir el coche. Código: ${response.code()}, Respuesta: $errorBody")
+                Log.e("addCar error", "Error al subir el coche. Código: ${response.code()}, Respuesta: ${response.errorBody()?.string()}")
             }
         } catch (e: Exception) {
             Log.e("addCar exception", "Error en la solicitud: ${e.message}")
-            throw Exception("Error en la solicitud: ${e.message}")
         }
     }
 
+    suspend fun updateCarOwner(carId: String, customerId: Int): Boolean {
+        return try {
+            // Obtener el coche actual antes de actualizar
+            val car = getCar(carId)
+
+            // Guardar la imagen antes de modificar el coche
+            val existingPicture = car.toCarRequest().data.picture ?: car.pictureUrl?.let {
+                PictureData(
+                    data = PictureAttributes(
+                        id = 0,
+                        attributes = PictureFormats(
+                            url = it,
+                            small = null,
+                            medium = null,
+                            thumbnail = null
+                        )
+                    )
+                )
+            }
+
+            // Mantener la imagen y actualizar solo customerId
+            val updatedCarRequest = car.toCarRequest().copy(
+                data = car.toCarRequest().data.copy(
+                    customer = customerId,
+                    picture = existingPicture // Restaurar la imagen guardada previamente
+                )
+            )
+
+            Log.d("CarRepository", "Enviando solicitud a Strapi para actualizar coche: $updatedCarRequest")
+
+            // Enviar actualización a Strapi
+            val response = apiService.updateCar(carId, updatedCarRequest)
+
+            Log.d("CarRepository", "Response Code: ${response.code()} - ${response.message()} - Body: ${response.errorBody()?.string()}")
+
+            response.isSuccessful
+        } catch (e: Exception) {
+            Log.e("CarRepository", "Error al actualizar el coche con el cliente: ${e.message}")
+            false
+        }
+    }
 }

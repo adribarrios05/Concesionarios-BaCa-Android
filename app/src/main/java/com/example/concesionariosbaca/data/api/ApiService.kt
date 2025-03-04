@@ -4,8 +4,10 @@ import com.example.concesionariosbaca.data.entities.*
 import com.example.concesionariosbaca.data.mapping.CarListResponse
 import com.example.concesionariosbaca.data.mapping.CarRequest
 import com.example.concesionariosbaca.data.mapping.CarResponse
+import com.example.concesionariosbaca.data.mapping.CustomerResponse
 import com.example.concesionariosbaca.data.repository.RegisterCustomerRequest
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -24,8 +26,21 @@ interface ApiService {
     suspend fun getCar(@Path("id") id: String): Response<CarResponse>
 
     // Añadir coche
+    @Multipart
     @POST("cars")
-    suspend fun addCar(@Body request: CarRequest): Response<CarResponse>
+    suspend fun addCar(
+        @Part("data") carData: RequestBody,
+        @Part image: MultipartBody.Part?
+    ): Response<CarResponse>
+
+    //Actualizar coche
+    @PUT("cars/{id}")
+    suspend fun updateCar(
+        @Path("id") carId: String,
+        @Body request: CarRequest
+    ): Response<Unit>
+
+
 
     // Obtener todos los clientes
     @GET("customers")
@@ -34,6 +49,10 @@ interface ApiService {
     // Obtener detalles de un cliente por ID
     @GET("customer/{id}")
     suspend fun getCustomer(@Path("id") id: String): Response<CustomerEntity>
+
+    @GET("customers")
+    suspend fun getCustomerByUserId(@Query("filters[user][id]") userId: Int): Response<CustomerResponse>
+
 
     // Obtener detalles de un usuario por ID
     @GET("user/{id}")
@@ -70,6 +89,7 @@ interface ApiService {
     suspend fun uploadImage(
         @Part file: MultipartBody.Part
     ): Response<List<StrapiUploadResponse>>
+
 }
 
 

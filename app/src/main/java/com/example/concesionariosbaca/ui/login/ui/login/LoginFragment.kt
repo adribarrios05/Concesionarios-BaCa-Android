@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.concesionariosbaca.R
 import com.example.concesionariosbaca.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
-import com.example.concesionariosbaca.ui.login.data.Result
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
 
@@ -62,20 +61,6 @@ class LoginFragment : Fragment() {
                 Toast.makeText(context, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
             }
         }
-
-        /*loginViewModel.loginResult.observe(viewLifecycleOwner) { result ->
-            when (result) {
-                is Result.Success ->{
-                    Toast.makeText(context, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        loginViewModel.saveToken(result.data.token)
-                        findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
-                    }
-                    Log.d("Login", "Login exitoso")
-                }
-                is Result.Error -> Toast.makeText(context, "Error al iniciar sesion: ${result.exception.message}", Toast.LENGTH_SHORT).show()
-            }
-        }*/
 
         binding.registerText.setOnClickListener {
             findNavController().navigate(R.id   .action_loginFragment_to_registerFragment)

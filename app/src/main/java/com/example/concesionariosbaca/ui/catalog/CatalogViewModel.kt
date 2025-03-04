@@ -28,7 +28,7 @@ class CatalogViewModel @Inject constructor(
     private fun getCars() {
         viewModelScope.launch {
             try {
-                val cars = carRepository.getCars()
+                val cars = carRepository.getCars().filter { it.customerId == null }
                 _catalog.value = cars
             } catch (e: Exception) {
                 _catalog.value = emptyList()

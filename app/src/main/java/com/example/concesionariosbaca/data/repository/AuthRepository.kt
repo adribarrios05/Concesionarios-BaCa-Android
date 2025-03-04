@@ -102,6 +102,33 @@ class AuthRepository @Inject constructor(
         }
     }
 
+    suspend fun getCustomerIdByUserId(userId: Int): Int? {
+        return try {
+            val response = apiService.getCustomerByUserId(userId)
+            if (response.isSuccessful) {
+                val responseBody = response.body()
+                Log.d("AuthRepository", "Respuesta completa: $responseBody")
+
+                val customerId = responseBody?.data?.firstOrNull()?.id
+                if (customerId != null) {
+                    Log.d("AuthRepository", "Customer ID encontrado: $customerId")
+                } else {
+                    Log.e("AuthRepository", "No se encontró ningún Customer ID para el User ID: $userId")
+                }
+
+                customerId
+            } else {
+                Log.e("AuthRepository", "Error en la API: ${response.errorBody()?.string()}")
+                null
+            }
+        } catch (e: Exception) {
+            Log.e("AuthRepository", "Error al obtener el Customer ID: ${e.message}")
+            null
+        }
+    }
+
+
+
 
     suspend fun saveJwtToken(jwt: String) {
         dataStoreManager.saveToken(jwt)

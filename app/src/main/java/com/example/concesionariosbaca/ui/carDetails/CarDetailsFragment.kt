@@ -71,7 +71,7 @@ class CarDetailsFragment : Fragment() {
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.item1 -> {
-                    //TODO() Implementar mapa
+                    findNavController().navigate(R.id.mapsFragment)
                     true
                 }
                 else -> false
@@ -95,6 +95,28 @@ class CarDetailsFragment : Fragment() {
             carType.text = getString(R.string.car_type, car.type)
             carColor.text = getString(R.string.car_color, car.color)
             Log.d("CarDetailsFragment", "Displaying car: ${car.brand} ${car.model}")
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                val isLoggedIn = carDetailsViewModel.isUserLoggedIn()
+                if (isLoggedIn && car.customerId == null) {
+                    buyButton.visibility = View.VISIBLE
+                    buyButton.setOnClickListener {
+                        carDetailsViewModel.buyCar(
+                            car.id,
+                            onSuccess = {
+                                Toast.makeText(requireContext(), "Coche comprado con éxito", Toast.LENGTH_SHORT).show()
+                                findNavController().navigate(R.id.action_carDetailsFragment_to_catalogFragment)
+                            },
+                            onFailure = { errorMessage ->
+                                Toast.makeText(requireContext(), "Error: $errorMessage", Toast.LENGTH_SHORT).show()
+                            }
+                        )
+
+                    }
+                } else {
+                    buyButton.visibility = View.GONE
+                }
+            }
         }
     }
 }
