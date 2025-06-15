@@ -20,6 +20,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.io.File
 import javax.inject.Inject
+import kotlin.math.log
 
 class CarRepository @Inject constructor(
     private val apiService: ApiService,
@@ -121,45 +122,41 @@ class CarRepository @Inject constructor(
         }
     }
 
-    suspend fun updateCarOwner(carId: String, customerId: Int): Boolean {
+    suspend fun updateCarOwner(carId: String, customerId: Int, pictureId: Int?): Boolean {
+        Log.d("CarRepository", "PUT carId=$carId con customerId=$customerId y pictureId=$pictureId")
+
         return try {
-            // Obtener el coche actual antes de actualizar
             val car = getCar(carId)
 
-            // Guardar la imagen antes de modificar el coche
-            val existingPicture = car.toCarRequest().data.picture ?: car.pictureUrl?.let {
-                PictureData(
-                    data = PictureAttributes(
-                        id = 0,
-                        attributes = PictureFormats(
-                            url = it,
-                            small = null,
-                            medium = null,
-                            thumbnail = null
-                        )
-                    )
+            val dataMap = mutableMapOf<String, Any>(
+                "brand" to car.brand,
+                "model" to car.model,
+                "horsePower" to car.horsePower,
+                "description" to car.description,
+                "price" to car.price,
+                "color" to car.color,
+                "type" to car.type,
+                "plate" to car.plate,
+                "doors" to car.doors,
+                "customer" to customerId
+            )
+
+            if (pictureId != null) {
+                dataMap["picture"] = mapOf(
+                    "connect" to listOf(mapOf("id" to pictureId))
                 )
             }
 
-            // Mantener la imagen y actualizar solo customerId
-            val updatedCarRequest = car.toCarRequest().copy(
-                data = car.toCarRequest().data.copy(
-                    customer = customerId,
-                    picture = existingPicture // Restaurar la imagen guardada previamente
-                )
-            )
+            val payload = mapOf("data" to dataMap)
 
-            Log.d("CarRepository", "Enviando solicitud a Strapi para actualizar coche: $updatedCarRequest")
-
-            // Enviar actualización a Strapi
-            val response = apiService.updateCar(carId, updatedCarRequest)
-
-            Log.d("CarRepository", "Response Code: ${response.code()} - ${response.message()} - Body: ${response.errorBody()?.string()}")
-
+            val response = apiService.putCarWithMap(carId, payload)
+            Log.d("CarRepository", "PUT response: ${response.code()} - ${response.message()}")
             response.isSuccessful
         } catch (e: Exception) {
-            Log.e("CarRepository", "Error al actualizar el coche con el cliente: ${e.message}")
+            Log.e("CarRepository", "Error en PUT del coche: ${e.message}")
             false
         }
     }
+
+
 }

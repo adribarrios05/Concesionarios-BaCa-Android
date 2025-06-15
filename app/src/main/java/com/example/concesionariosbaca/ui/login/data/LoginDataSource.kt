@@ -7,9 +7,19 @@ import com.example.concesionariosbaca.data.mapping.toLoggedInUser
 import com.example.concesionariosbaca.ui.login.data.model.LoggedInUser
 import retrofit2.Response
 import java.io.IOException
-
+/**
+ * Fuente de datos para la autenticación de usuarios.
+ * Utiliza `ApiService` para realizar llamadas de red al backend.
+ */
 class LoginDataSource(private val apiService: ApiService) {
 
+    /**
+     * Intenta iniciar sesión con las credenciales proporcionadas.
+     *
+     * @param username Nombre de usuario o email.
+     * @param password Contraseña.
+     * @return Resultado de la operación, ya sea `Success` o `Error`.
+     */
     suspend fun login(username: String, password: String): Result<LoggedInUser> {
         return try {
             val response: Response<LoginResponse> = apiService.login(LoginUser(username, password))
@@ -25,6 +35,7 @@ class LoginDataSource(private val apiService: ApiService) {
         }
     }
 
-    fun logout() {
-    }
+    /** Cierra sesión localmente (si fuera necesario implementar lógica adicional). */
+    fun logout() {}
 }
+

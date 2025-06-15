@@ -14,52 +14,47 @@
             android:orientation="vertical"
             android:padding="16dp"
             android:layout_marginTop="110dp"
-            android:layout_marginBottom="90dp"
-            >
+            android:layout_marginBottom="90dp">
 
-            <!-- Imagen del coche -->
             <ImageView
                 android:id="@+id/carImageView"
                 android:layout_width="320dp"
                 android:layout_height="180dp"
                 android:layout_marginBottom="16dp"
-                android:contentDescription="Imagen del coche"
+                android:contentDescription="@string/car_image"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:scaleType="centerCrop"
                 android:background="@drawable/ic_add_photo" />
 
-            <!-- Botón para abrir la cámara -->
             <Button
                 android:id="@+id/openCameraButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tomar Foto"
+                android:text="@string/take_photo"
                 app:layout_constraintTop_toBottomOf="@id/carImageView"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="8dp"
                 android:backgroundTint="@color/dark_red"
                 android:textColor="@android:color/white"/>
 
-            <!-- Botón para seleccionar imagen de la galería -->
             <Button
                 android:id="@+id/uploadFromGalleryButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Seleccionar desde Galería"
+                android:text="@string/select_from_gallery"
                 app:layout_constraintTop_toBottomOf="@id/carImageView"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="8dp"
                 android:backgroundTint="@color/dark_red"
                 android:textColor="@android:color/white"/>
 
-            <!-- Campos de entrada de datos -->
             <EditText
                 android:id="@+id/brandEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Marca"
+                android:hint="@string/brand"
                 app:layout_constraintTop_toBottomOf="@id/uploadFromGalleryButton"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +64,7 @@
                 android:id="@+id/modelEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Modelo"
+                android:hint="@string/model"
                 app:layout_constraintTop_toBottomOf="@id/brandEditText"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -79,7 +74,7 @@
                 android:id="@+id/horsePowerEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Caballos de fuerza"
+                android:hint="@string/horse_power"
                 android:inputType="number"
                 app:layout_constraintTop_toBottomOf="@id/modelEditText"
                 app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +85,7 @@
                 android:id="@+id/descriptionEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Descripción"
+                android:hint="@string/description"
                 android:inputType="textMultiLine"
                 app:layout_constraintTop_toBottomOf="@id/horsePowerEditText"
                 app:layout_constraintStart_toStartOf="parent"
@@ -101,7 +96,7 @@
                 android:id="@+id/colorEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Color"
+                android:hint="@string/color"
                 app:layout_constraintTop_toBottomOf="@id/descriptionEditText"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -111,7 +106,7 @@
                 android:id="@+id/typeEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Tipo"
+                android:hint="@string/type"
                 app:layout_constraintTop_toBottomOf="@id/colorEditText"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -121,7 +116,7 @@
                 android:id="@+id/priceEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Precio"
+                android:hint="@string/price"
                 android:inputType="numberDecimal"
                 app:layout_constraintTop_toBottomOf="@id/typeEditText"
                 app:layout_constraintStart_toStartOf="parent"
@@ -132,7 +127,7 @@
                 android:id="@+id/plateEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Placa"
+                android:hint="@string/plate"
                 app:layout_constraintTop_toBottomOf="@id/priceEditText"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -142,19 +137,18 @@
                 android:id="@+id/doorsEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Número de puertas"
+                android:hint="@string/doors"
                 android:inputType="number"
                 app:layout_constraintTop_toBottomOf="@id/plateEditText"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="8dp" />
 
-            <!-- Botón para enviar -->
             <Button
                 android:id="@+id/submitButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Vender Coche"
+                android:text="@string/sell_car"
                 android:backgroundTint="@color/dark_red"
                 app:layout_constraintTop_toBottomOf="@id/doorsEditText"
                 app:layout_constraintStart_toStartOf="parent"
@@ -162,7 +156,6 @@
                 android:layout_marginTop="16dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.core.widget.NestedScrollView>
 
     <include

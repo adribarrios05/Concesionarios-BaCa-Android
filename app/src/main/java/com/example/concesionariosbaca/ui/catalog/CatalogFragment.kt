@@ -23,11 +23,18 @@ import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+/**
+ * Fragmento que muestra la lista de coches disponibles en el catálogo.
+ */
 @AndroidEntryPoint
 class CatalogFragment : Fragment() {
 
     private lateinit var binding: FragmentCatalogBinding
+
+    /** ViewModel para manejar los datos del catálogo. */
     private val catalogViewModel: CatalogViewModel by viewModels()
+
+    /** ViewModel del perfil (no utilizado directamente aquí). */
     private val profileViewModel: ProfileViewModel by viewModels()
 
     override fun onCreateView(
@@ -42,25 +49,29 @@ class CatalogFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Adapter para la lista de coches
         val carAdapter = CarAdapter(requireContext()) { car ->
             val action = CatalogFragmentDirections.actionCatalogFragmentToCarDetailsFragment(car.id)
             findNavController().navigate(action)
         }
+
         val recyclerView = binding.catalogList
         val emptyState = binding.emptyState
         val menuButton: MaterialButton = view.findViewById(R.id.menu_button)
         val popupMenu = PopupMenu(requireContext(), menuButton)
         val backButton: MaterialButton = view.findViewById(R.id.back_button)
+
         popupMenu.menuInflater.inflate(R.menu.main_menu, popupMenu.menu)
 
         recyclerView.apply {
             adapter = carAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
+
+        // Observa los cambios en el catálogo y actualiza la vista
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 catalogViewModel.catalog.collect { cars ->
-
                     if (cars.isNullOrEmpty()) {
                         recyclerView.visibility = View.GONE
                         emptyState.visibility = View.VISIBLE
@@ -90,7 +101,5 @@ class CatalogFragment : Fragment() {
                 else -> false
             }
         }
-
     }
-
 }

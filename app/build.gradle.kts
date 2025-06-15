@@ -5,7 +5,8 @@ plugins {
     id("com.google.dagger.hilt.android")
     id ("androidx.navigation.safeargs.kotlin")
     kotlin("plugin.serialization") version "2.0.21"
-
+    id("com.google.gms.google-services")
+    id("org.jetbrains.dokka") version "1.9.10"
 }
 
 android {
@@ -117,7 +118,14 @@ dependencies {
         implementation(libs.play.services.maps)
         implementation(libs.play.services.location)
 
+    //Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation (libs.firebase.auth.ktx)
+    implementation (libs.firebase.firestore.ktx)
 
+    //Worker manager
+    implementation(libs.androidx.work.runtime.ktx)
 }
 
 kapt{

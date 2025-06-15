@@ -36,7 +36,7 @@
             android:id="@+id/usernameEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Nombre de usuario"
+            android:hint="@string/username_hint"
             app:layout_constraintTop_toBottomOf="@id/profileImage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -47,37 +47,22 @@
             android:id="@+id/emailEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Correo electrónico"
+            android:hint="@string/email_hint"
             app:layout_constraintTop_toBottomOf="@id/usernameEditText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="16dp" />
 
-        <!-- Cambiar contraseña -->
-        <!--<Button
-            android:id="@+id/changePasswordButton"
+        <!-- Switch para cambiar idioma -->
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/languageSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cambiar contraseña"
-            android:backgroundTint="@color/dark_red"
-            android:textColor="@android:color/white"
+            android:text="@string/change_language"
             app:layout_constraintTop_toBottomOf="@id/emailEditText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="24dp" />-->
-
-        <!-- Botón para guardar cambios -->
-        <!--<Button
-            android:id="@+id/saveButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Guardar"
-            android:backgroundTint="@color/dark_red"
-            android:textColor="@android:color/white"
-            app:layout_constraintTop_toBottomOf="@id/changePasswordButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="24dp" />-->
+            android:layout_marginTop="16dp"/>
 
         <!-- Botón para cerrar sesión -->
         <Button
@@ -86,12 +71,12 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:backgroundTint="@color/dark_red"
-            android:text="Cerrar sesión"
+            android:text="@string/logout"
             android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/emailEditText" />
+            app:layout_constraintTop_toBottomOf="@+id/languageSwitch" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

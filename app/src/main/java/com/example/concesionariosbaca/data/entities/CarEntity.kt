@@ -15,6 +15,7 @@ data class CarEntity(
     val price: Double,
     val plate: String,
     val pictureUrl: String?,
+    val pictureId: Int?,
     val doors: Int,
     val customerId: Int?
 )

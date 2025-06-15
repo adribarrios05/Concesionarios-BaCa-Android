@@ -15,11 +15,15 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * ViewModel para manejar el estado y acciones del perfil del usuario.
+ */
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
+    /** Usuario actualmente autenticado. */
     private val _loggedInUser = MutableLiveData<UserEntity?>()
     val loggedInUser: LiveData<UserEntity?> = _loggedInUser
 
@@ -32,6 +36,7 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    /** Cierra la sesión del usuario actual. */
     fun logout() {
         viewModelScope.launch {
             authRepository.logoutUser()

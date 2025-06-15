@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/catalogFragment"
         android:icon="@drawable/ic_catalog"
-        android:title="Catálogo"
+        android:title="@string/menu_catalog"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/sellCarFragment2"
         android:icon="@drawable/ic_sell_your_car"
-        android:title="Reventa"
+        android:title="@string/menu_resell"
         app:showAsAction="ifRoom"
         tools:ignore="DuplicateIds" />
 
     <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/ic_profile"
-        android:title="Perfil"
+        android:title="@string/menu_profile"
         app:showAsAction="ifRoom" />
 
 </menu>

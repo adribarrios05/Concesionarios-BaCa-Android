@@ -14,6 +14,10 @@ import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Repositorio principal para gestionar el inicio de sesión del usuario.
+ * Coordina llamadas a la API y almacenamiento local con DataStore.
+ */
 @Singleton
 class LoginRepository @Inject constructor(
     private val apiService: ApiService,
@@ -22,18 +26,21 @@ class LoginRepository @Inject constructor(
 
     private var user: LoggedInUser? = null
 
-    fun getToken(): Flow<String?> {
-        return dataStoreManager.token
-    }
+    /** Devuelve un flujo con el token JWT almacenado. */
+    fun getToken(): Flow<String?> = dataStoreManager.token
 
-    suspend fun saveToken(token: String) {
+    /** Guarda el token JWT (por implementar). */
+    suspend fun saveToken(token: String) {}
 
-    }
+    /** Indica si el usuario tiene sesión iniciada. */
+    suspend fun isUserLoggedIn(): Boolean =
+        getToken().firstOrNull()?.isNotEmpty() ?: false
 
-    suspend fun isUserLoggedIn(): Boolean {
-        return getToken().firstOrNull()?.isNotEmpty() ?: false
-    }
-
+    /**
+     * Inicia sesión con usuario y contraseña.
+     *
+     * @return Resultado con el usuario autenticado o error.
+     */
     suspend fun login(username: String, password: String): Result<LoggedInUser> {
         return try {
             val response = apiService.login(LoginUser(username, password))
@@ -55,11 +62,15 @@ class LoginRepository @Inject constructor(
         }
     }
 
+    /** Elimina el token de sesión y borra el usuario en memoria. */
     suspend fun logout() {
         dataStoreManager.clearToken()
         user = null
     }
 
+    /**
+     * Obtiene el perfil del usuario actual a partir del token JWT.
+     */
     suspend fun getUserProfile(token: String): Result<UserEntity> {
         return try {
             val response = apiService.getCurrentUser("Bearer $token")
@@ -74,6 +85,7 @@ class LoginRepository @Inject constructor(
         }
     }
 
+    /** Función pendiente para actualizar el perfil del usuario. */
     suspend fun updateUserProfile(token: String, username: String, email: String): Result<UserEntity>? {
         return null
     }

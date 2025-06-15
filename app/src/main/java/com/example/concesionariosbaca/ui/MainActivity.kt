@@ -14,6 +14,10 @@ import com.example.concesionariosbaca.data.repository.AuthRepository
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * Actividad principal de la aplicación. Controla la navegación global
+ * y gestiona el comportamiento del `BottomNavigationView`.
+ */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -33,13 +37,13 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationView.setupWithNavController(navController)
 
-        // Observa si el usuario está autenticado
+        // Cambia el nombre del item según el estado de sesión
         profileViewModel.loggedInUser.observe(this) { user ->
             val menuItem = bottomNavigationView.menu.findItem(R.id.profileFragment)
             menuItem.title = if (user != null) "Perfil" else "Iniciar sesión"
         }
 
-        // Manejar navegación en el botón de perfil
+        // Navegación personalizada para botón de perfil
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.profileFragment -> {

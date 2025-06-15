@@ -1,7 +1,7 @@
 package com.example.concesionariosbaca.ui.login.ui.login
 
 /**
- * Authentication result : success (user details) or error message.
+ * Resultado de la autenticación: éxito (con detalles del usuario) o error (con mensaje).
  */
 data class LoginResult(
     val success: LoggedInUserView? = null,

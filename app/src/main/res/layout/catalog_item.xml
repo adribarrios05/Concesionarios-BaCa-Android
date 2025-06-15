@@ -22,8 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:scaleType="centerCrop"
-            tools:srcCompat="@tools:sample/avatars"
-            android:contentDescription="Coche" />
+            android:contentDescription="@string/car_image_desc"
+            tools:srcCompat="@tools:sample/avatars" />
 
         <!-- Nombre del coche -->
         <TextView
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="Coche"
+            android:text="@string/car_title_placeholder"
             android:textSize="18sp"
             android:textStyle="bold" />
 

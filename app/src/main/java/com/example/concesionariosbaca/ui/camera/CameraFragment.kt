@@ -19,6 +19,10 @@ import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+/**
+ * Fragmento que permite capturar una imagen con la cámara del dispositivo.
+ * Utiliza CameraX para la funcionalidad de cámara.
+ */
 class CameraFragment : Fragment() {
 
     private lateinit var binding: FragmentCameraBinding
@@ -44,6 +48,9 @@ class CameraFragment : Fragment() {
         }
     }
 
+    /**
+     * Inicia la cámara trasera y vincula el flujo de captura.
+     */
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
@@ -63,6 +70,9 @@ class CameraFragment : Fragment() {
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
+    /**
+     * Captura una foto y la guarda en el almacenamiento externo del dispositivo.
+     */
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
 
@@ -89,3 +99,4 @@ class CameraFragment : Fragment() {
         cameraExecutor.shutdown()
     }
 }
+

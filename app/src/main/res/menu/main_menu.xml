@@ -2,5 +2,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/item1"
-        android:title="Encuéntranos" />
+        android:title="@string/menu_find_us" />
 </menu>

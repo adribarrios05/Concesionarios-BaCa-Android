@@ -25,6 +25,10 @@ import android.Manifest
 import android.util.Log
 import java.util.UUID
 
+/**
+ * Fragmento que permite a los usuarios publicar un coche a la venta.
+ * Incluye selección de imagen desde galería o cámara, y subida de datos.
+ */
 @AndroidEntryPoint
 class SellCarFragment : Fragment() {
 
@@ -34,6 +38,7 @@ class SellCarFragment : Fragment() {
     private var imageUri: Uri? = null
     private lateinit var cameraController: LifecycleCameraController
 
+    /** Launcher para seleccionar imagen desde la galería. */
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
             sellCarViewModel.onImageCaptured(it)
@@ -41,6 +46,7 @@ class SellCarFragment : Fragment() {
         }
     }
 
+    /** Launcher para tomar una imagen con la cámara. */
     private val cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success: Boolean ->
         if (success) {
             sellCarViewModel.onImageCaptured(imageUri)
@@ -48,14 +54,16 @@ class SellCarFragment : Fragment() {
         }
     }
 
+    /** Solicita permiso de cámara si no está concedido. */
     private val cameraPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-        if (isGranted) {
-            openCamera()
-        } else {
-            Toast.makeText(requireContext(), "Permiso de cámara denegado", Toast.LENGTH_SHORT).show()
-        }
+        if (isGranted) openCamera()
+        else Toast.makeText(requireContext(), "Permiso de cámara denegado", Toast.LENGTH_SHORT).show()
     }
 
+    /**
+     * Comprueba si el permiso de cámara está concedido.
+     * Si no, lo solicita.
+     */
     private fun checkCameraPermission() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
@@ -64,10 +72,7 @@ class SellCarFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSellCarBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -77,6 +82,9 @@ class SellCarFragment : Fragment() {
         _binding = null
     }
 
+    /**
+     * Inicializa listeners para botones de imagen y formulario de venta.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -89,25 +97,28 @@ class SellCarFragment : Fragment() {
         binding.submitButton.setOnClickListener { submitCar() }
 
         sellCarViewModel.photo.observe(viewLifecycleOwner) { uri ->
-            if(uri != null) {
-                binding.carImageView.setImageURI(uri)
-            }
+            uri?.let { binding.carImageView.setImageURI(it) }
         }
     }
 
+    /** Abre el selector de imágenes de la galería. */
     private fun openGallery() {
         galleryLauncher.launch("image/*")
     }
 
+    /** Lanza la cámara para capturar una imagen. */
     private fun openCamera() {
         val photoFile = File(requireContext().cacheDir, "temp_image.jpg")
         imageUri = FileProvider.getUriForFile(requireContext(), "com.example.concesionariosbaca.fileprovider", photoFile)
         cameraLauncher.launch(imageUri)
     }
 
+    /**
+     * Envia los datos del coche junto a la imagen para su publicación.
+     */
     private fun submitCar() {
         lifecycleScope.launch {
-            try{
+            try {
                 val imageFile = sellCarViewModel.getImageFile(requireContext())
 
                 val car = CarEntity(
@@ -121,14 +132,15 @@ class SellCarFragment : Fragment() {
                     price = binding.priceEditText.text.toString().toDouble(),
                     plate = binding.plateEditText.text.toString(),
                     pictureUrl = null,
+                    pictureId = null,
                     doors = binding.doorsEditText.text.toString().toInt(),
                     customerId = null
                 )
 
                 sellCarViewModel.uploadCar(car, imageFile)
                 Toast.makeText(requireContext(), "Coche subido con éxito", Toast.LENGTH_SHORT).show()
-            } catch (e: Exception){
-                Log.e("submitCar: ", "Error al subir el coche: $e")
+            } catch (e: Exception) {
+                Log.e("submitCar", "Error al subir el coche: $e")
                 Toast.makeText(requireContext(), "No se pudo subir el coche. Inténtelo de nuevo.", Toast.LENGTH_LONG).show()
             }
         }

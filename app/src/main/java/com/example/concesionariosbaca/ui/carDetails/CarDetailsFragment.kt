@@ -1,6 +1,7 @@
 package com.example.concesionariosbaca.ui.carDetails
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,22 +15,28 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import coil.load
 import com.example.concesionariosbaca.R
+import com.example.concesionariosbaca.data.CarNotificationWorker
 import com.example.concesionariosbaca.databinding.FragmentCarDetailsBinding
 import com.example.concesionariosbaca.data.entities.CarEntity
 import com.example.concesionariosbaca.ui.profile.ProfileViewModel
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-
+/**
+ * Fragmento que muestra los detalles de un coche seleccionado
+ * y permite realizar la compra si el usuario está autenticado.
+ */
 @AndroidEntryPoint
 class CarDetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentCarDetailsBinding
     private val carDetailsViewModel: CarDetailsViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,13 +50,10 @@ class CarDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val menuButton: MaterialButton = view.findViewById(R.id.menu_button)
-        val popupMenu = PopupMenu(requireContext(), menuButton)
-        val backButton: MaterialButton = view.findViewById(R.id.back_button)
         val carId = CarDetailsFragmentArgs.fromBundle(requireArguments()).carId
         carDetailsViewModel.getCarDetails(carId)
 
-
+        // Observa los detalles del coche
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 carDetailsViewModel.carDetails.collect { car ->
@@ -57,12 +61,11 @@ class CarDetailsFragment : Fragment() {
                 }
             }
         }
-        carDetailsViewModel.getCarDetails(carId)
 
-
-        backButton.setOnClickListener {
-            findNavController().popBackStack()
-        }
+        // Configura botones del menú
+        val menuButton: MaterialButton = view.findViewById(R.id.menu_button)
+        val popupMenu = PopupMenu(requireContext(), menuButton)
+        popupMenu.menuInflater.inflate(R.menu.main_menu, popupMenu.menu)
 
         menuButton.setOnClickListener {
             popupMenu.show()
@@ -77,8 +80,16 @@ class CarDetailsFragment : Fragment() {
                 else -> false
             }
         }
+
+        val backButton: MaterialButton = view.findViewById(R.id.back_button)
+        backButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
+    /**
+     * Muestra los datos del coche en pantalla y configura el botón de compra si aplica.
+     */
     @SuppressLint("SetTextI18n")
     private fun displayCarDetails(car: CarEntity) {
         binding.apply {
@@ -94,7 +105,6 @@ class CarDetailsFragment : Fragment() {
             carDoors.text = getString(R.string.car_doors, car.doors)
             carType.text = getString(R.string.car_type, car.type)
             carColor.text = getString(R.string.car_color, car.color)
-            Log.d("CarDetailsFragment", "Displaying car: ${car.brand} ${car.model}")
 
             viewLifecycleOwner.lifecycleScope.launch {
                 val isLoggedIn = carDetailsViewModel.isUserLoggedIn()
@@ -103,15 +113,27 @@ class CarDetailsFragment : Fragment() {
                     buyButton.setOnClickListener {
                         carDetailsViewModel.buyCar(
                             car.id,
-                            onSuccess = {
+                            onSuccess = { updatedCar ->
                                 Toast.makeText(requireContext(), "Coche comprado con éxito", Toast.LENGTH_SHORT).show()
+
+                                // Lanza notificación con WorkManager
+                                val workRequest = OneTimeWorkRequestBuilder<CarNotificationWorker>()
+                                    .setInputData(
+                                        workDataOf(
+                                            "brand" to updatedCar.brand,
+                                            "model" to updatedCar.model
+                                        )
+                                    )
+                                    .build()
+                                WorkManager.getInstance(requireContext().applicationContext)
+                                    .enqueue(workRequest)
+
                                 findNavController().navigate(R.id.action_carDetailsFragment_to_catalogFragment)
                             },
                             onFailure = { errorMessage ->
                                 Toast.makeText(requireContext(), "Error: $errorMessage", Toast.LENGTH_SHORT).show()
                             }
                         )
-
                     }
                 } else {
                     buyButton.visibility = View.GONE
@@ -120,3 +142,4 @@ class CarDetailsFragment : Fragment() {
         }
     }
 }
+

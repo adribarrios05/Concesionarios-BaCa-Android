@@ -16,7 +16,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
 
-
+/**
+ * Fragmento que representa la interfaz de login del usuario.
+ * Permite iniciar sesión y navegar al registro o al perfil si ya está autenticado.
+ */
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
 
@@ -29,6 +32,7 @@ class LoginFragment : Fragment() {
     ): View {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
 
+        // Si el usuario ya está logueado, lo redirige al perfil.
         viewLifecycleOwner.lifecycleScope.launch {
             if (loginViewModel.isUserLoggedIn()) {
                 findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
@@ -48,7 +52,6 @@ class LoginFragment : Fragment() {
             val password = binding.password.text.toString()
 
             if (username.isNotEmpty() && password.isNotEmpty()) {
-                Log.d("logginBtn", "Datos pasados al login")
                 viewLifecycleOwner.lifecycleScope.launch {
                     val success = loginViewModel.login(username, password)
                     if (success) {
@@ -63,7 +66,7 @@ class LoginFragment : Fragment() {
         }
 
         binding.registerText.setOnClickListener {
-            findNavController().navigate(R.id   .action_loginFragment_to_registerFragment)
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
         backButton.setOnClickListener {
@@ -71,3 +74,4 @@ class LoginFragment : Fragment() {
         }
     }
 }
+

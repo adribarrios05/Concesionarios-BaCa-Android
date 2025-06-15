@@ -15,23 +15,33 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * ViewModel que maneja la lógica de autenticación del usuario.
+ * Conecta con el repositorio de autenticación para iniciar/cerrar sesión.
+ */
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
 
-
+    /**
+     * Intenta iniciar sesión con las credenciales proporcionadas.
+     * @return true si la autenticación fue exitosa.
+     */
     suspend fun login(username: String, password: String): Boolean {
         return authRepository.loginUser(username, password)
     }
 
+    /** Cierra sesión del usuario actual. */
     fun logout() {
         viewModelScope.launch {
             authRepository.logoutUser()
         }
     }
 
+    /** Verifica si hay una sesión de usuario activa. */
     suspend fun isUserLoggedIn(): Boolean {
         return authRepository.isUserLoggedIn()
     }
 }
+

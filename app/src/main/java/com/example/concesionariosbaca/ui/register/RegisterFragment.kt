@@ -21,6 +21,9 @@ import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+/**
+ * Fragmento que permite al usuario registrarse como cliente.
+ */
 @AndroidEntryPoint
 class RegisterFragment : Fragment() {
 
@@ -39,12 +42,9 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val menuButton: MaterialButton = view.findViewById(R.id.menu_button)
-        val popupMenu = PopupMenu(requireContext(), menuButton)
-        val backButton: MaterialButton = view.findViewById(R.id.back_button)
+        // Selector de fecha de nacimiento
         val ageEditText: EditText = view.findViewById(R.id.ageEditText)
-
-        ageEditText.setOnClickListener{
+        ageEditText.setOnClickListener {
             val calendar = Calendar.getInstance()
             val year = calendar.get(Calendar.YEAR)
             val month = calendar.get(Calendar.MONTH)
@@ -61,6 +61,7 @@ class RegisterFragment : Fragment() {
             datePickerDialog.show()
         }
 
+        // Registro
         binding.registerButton.setOnClickListener {
             val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
@@ -78,37 +79,19 @@ class RegisterFragment : Fragment() {
             }
         }
 
-        backButton.setOnClickListener {
-            findNavController().popBackStack()
-        }
-
         binding.loginText.setOnClickListener {
             findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }
 
-        /*menuButton.setOnClickListener {
-            popupMenu.show()
+        val backButton: MaterialButton = view.findViewById(R.id.back_button)
+        backButton.setOnClickListener {
+            findNavController().popBackStack()
         }
-
-        popupMenu.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.item1 -> {
-                    // Acción para item1
-                    true
-                }
-                R.id.item2 -> {
-                    findNavController().navigate(R.id.catalogFragment)
-                    true
-                }
-                R.id.item3 -> {
-                    findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
-                    true
-                }
-                else -> false
-            }
-        }*/
     }
 
+    /**
+     * Valida que los campos del formulario estén correctamente rellenados.
+     */
     private fun validateInput(
         email: String,
         password: String,
@@ -134,6 +117,9 @@ class RegisterFragment : Fragment() {
         }
     }
 
+    /**
+     * Llama al ViewModel para registrar el usuario y cliente en el backend.
+     */
     private suspend fun register(
         email: String,
         password: String,
@@ -152,23 +138,20 @@ class RegisterFragment : Fragment() {
             } else {
                 val error = result.exceptionOrNull()?.message ?: "Error desconocido"
                 Toast.makeText(context, "Error: $error", Toast.LENGTH_SHORT).show()
-                Log.e("Error: ", error)
             }
         } catch (e: Exception) {
             Toast.makeText(context, "Error inesperado: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
+    /**
+     * Navega al siguiente fragmento después de registrar el cliente.
+     */
     private fun navigateToNextScreen() {
         if (registerViewModel.jwtToken.value != null) {
             findNavController().navigate(R.id.catalogFragment)
         } else {
             findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }
-    }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
 }

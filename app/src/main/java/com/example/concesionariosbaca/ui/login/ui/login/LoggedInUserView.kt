@@ -1,9 +1,9 @@
 package com.example.concesionariosbaca.ui.login.ui.login
 
 /**
- * User details post authentication that is exposed to the UI
+ * Detalles del usuario expuestos a la interfaz de usuario tras autenticarse.
  */
 data class LoggedInUserView(
     val username: String
-    //... other data fields that may be accessible to the UI
+    // Otros campos accesibles desde la UI podrían añadirse aquí.
 )

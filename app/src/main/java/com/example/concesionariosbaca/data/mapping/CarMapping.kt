@@ -7,6 +7,14 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.serialization.Serializer
 import java.lang.reflect.Type
 
+data class CustomerRelation(
+    val data: CustomerIdWrapper?
+)
+
+data class CustomerIdWrapper(
+    val id: Int
+)
+
 data class CarResponse(
     val data: CarData,
     val meta: Meta
@@ -36,7 +44,7 @@ data class CarAttributes(
     val plate: String,
     val picture: PictureData?,
     val doors: Int,
-    val customer: Int?,
+    val customer: CustomerRelation?,
 
 ) {
     val pictureUrl: String?
@@ -92,7 +100,8 @@ fun CarData.toCarEntity(): CarEntity {
         plate = this.attributes.plate,
         doors = this.attributes.doors,
         pictureUrl = this.attributes.pictureUrl,
-        customerId = this.attributes.customer
+        pictureId = this.attributes.picture?.data?.id,
+        customerId = this.attributes.customer?.data?.id
     )
 }
 
@@ -109,7 +118,7 @@ fun CarEntity.toCarRequest(): CarRequest {
             plate = this.plate,
             doors = this.doors,
             picture = pictureUrl?.let { PictureData(PictureAttributes(0, PictureFormats(it, null, null, null))) },
-            customer = this.customerId,
+            customer = this.customerId?.let { CustomerRelation(CustomerIdWrapper(it)) },
         )
     )
 }

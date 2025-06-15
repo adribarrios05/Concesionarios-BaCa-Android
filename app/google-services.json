@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1098140390614",
+    "project_id": "concesionarios-baca",
+    "storage_bucket": "concesionarios-baca.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1098140390614:android:c5322408062f8205dea577",
+        "android_client_info": {
+          "package_name": "com.example.concesionariosbaca"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8FzNCsJ8PTwYZtjfQGlTQTTzR54W4szo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

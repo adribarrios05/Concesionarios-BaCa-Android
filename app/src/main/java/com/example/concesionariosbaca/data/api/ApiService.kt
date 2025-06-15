@@ -18,8 +18,9 @@ import javax.inject.Singleton
 interface ApiService {
 
     // Obtener todos los coches con imágenes relacionadas
-    @GET("cars?populate=picture")
+    @GET("cars?populate[customer]=*&populate[picture]=*")
     suspend fun getCars(): Response<CarListResponse>
+
 
     // Obtener detalles de un coche por ID
     @GET("car/{id}")
@@ -38,6 +39,12 @@ interface ApiService {
     suspend fun updateCar(
         @Path("id") carId: String,
         @Body request: CarRequest
+    ): Response<Unit>
+
+    @PUT("cars/{id}")
+    suspend fun putCarWithMap(
+        @Path("id") carId: String,
+        @Body body: Map<String, @JvmSuppressWildcards Any?>
     ): Response<Unit>
 
 

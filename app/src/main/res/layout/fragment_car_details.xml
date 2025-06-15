@@ -37,7 +37,7 @@
                 android:textStyle="bold"
                 android:paddingTop="8dp"
                 android:gravity="center"
-                android:contentDescription="Coche"/>
+                android:contentDescription="@string/car_name" />
 
             <TextView
                 android:id="@+id/carDescription"
@@ -46,7 +46,7 @@
                 android:textSize="18sp"
                 android:paddingTop="8dp"
                 android:gravity="center"
-                android:contentDescription="Description"/>
+                android:contentDescription="@string/car_description" />
 
             <TextView
                 android:id="@+id/carPrice"
@@ -54,7 +54,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:paddingTop="8dp"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:contentDescription="@string/car_price" />
 
             <TextView
                 android:id="@+id/carHorsePower"
@@ -62,7 +63,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:paddingTop="8dp"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:contentDescription="@string/car_horsepower" />
 
             <TextView
                 android:id="@+id/carDoors"
@@ -70,7 +72,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:paddingTop="8dp"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:contentDescription="@string/car_doors" />
 
             <TextView
                 android:id="@+id/carType"
@@ -78,7 +81,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:paddingTop="8dp"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:contentDescription="@string/car_type" />
 
             <TextView
                 android:id="@+id/carColor"
@@ -86,13 +90,14 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:paddingTop="8dp"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:contentDescription="@string/car_color" />
 
             <Button
                 android:id="@+id/buyButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Comprar"
+                android:text="@string/buy"
                 android:visibility="gone"
                 android:padding="10dp"
                 android:layout_marginTop="16dp"
@@ -102,9 +107,7 @@
                 android:textSize="18sp"
                 android:elevation="4dp"
                 android:gravity="center"
-                android:layout_gravity="center_horizontal"/>
-
-
+                android:layout_gravity="center_horizontal" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

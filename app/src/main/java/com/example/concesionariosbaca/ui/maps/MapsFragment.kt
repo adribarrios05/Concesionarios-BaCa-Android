@@ -13,6 +13,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
+/**
+ * Fragmento que muestra un mapa de Google con marcadores de concesionarios.
+ */
 class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private var _binding: FragmentMapsBinding? = null
@@ -27,6 +30,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         return binding.root
     }
 
+    /**
+     * Inicializa el mapa al estar la vista creada.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -34,6 +40,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         mapFragment?.getMapAsync(this)
     }
 
+    /**
+     * Se llama cuando el mapa está listo. Añade marcadores y mueve la cámara.
+     */
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
 
@@ -48,3 +57,4 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         _binding = null
     }
 }
+
